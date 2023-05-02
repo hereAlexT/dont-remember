@@ -65,7 +65,7 @@ tablenames: words
 tablenames: dic
 [uuid, word, definition, speech_part, example,language_A, language_B] #language is language of word, language_b is word of defination
 tablesnames: team
-[uuid, team_defination_uuid, user_uuid]
+[uuid, team_info_uuid, user_uuid]
 tablesnames: team_info
 [uuid, name]
 ```
