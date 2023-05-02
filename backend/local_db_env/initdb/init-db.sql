@@ -34,3 +34,18 @@ CREATE TABLE dic
     language_a  VARCHAR(255) NOT NULL,
     language_b  VARCHAR(255) NOT NULL
 );
+
+CREATE TABLE team
+(
+    uuid                UUID PRIMARY KEY,
+    team_info_uuid UUID NOT NULL,
+    user_uuid           UUID NOT NULL,
+    FOREIGN KEY (user_uuid) REFERENCES users (uuid)
+);
+
+CREATE TABLE team_info
+(
+    uuid                UUID PRIMARY KEY,
+    name                VARCHAR(255) NOT NULL
+);
+
