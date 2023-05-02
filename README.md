@@ -58,10 +58,11 @@ return:
 ### Databases 
 ```
 Postgres
-USER_table:
+table name: users
 [uuid, username, password, token, token_expiration]
-Word_table:
+tablenames: words
 [uuid, dic_uuid, user_uuid, last_review_time, next_review_time]
-Dic_table:
-[uuid, word, definition, language_A, language_B] #language is language of word, language_b is word of defination
+tablenames: dic
+[uuid, word, definition, speech_part, example,language_A, language_B] #language is language of word, language_b is word of defination
 ```
+Note: language_A and language_B should follow [ISO 639-1 standard language codes]("https://www.andiamo.co.uk/resources/iso-language-codes/)
