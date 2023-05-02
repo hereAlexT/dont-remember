@@ -8,6 +8,12 @@ Accepted Token: Bearer Token <br>
 state has three value "remember" and "forget"
 
 ```
+POST /api/v1/signup
+payload:
+{username: [username], password:[password]}
+return:
+{status: 200, message: "Success"}
+{status: 409, message: "User already exist"}
 POST /api/v1/login 
 payload: 
 {username: [username], password: [password]}
@@ -53,7 +59,7 @@ return:
 ```
 Postgres
 USER_table:
-[uuid, username, password, token, token_created_time]
+[uuid, username, password, token, token_expiration]
 Word_table:
 [uuid, dic_uuid, user_uuid, last_review_time, next_review_time]
 Dic_table:
