@@ -8,6 +8,12 @@ Accepted Token: Bearer Token <br>
 state has three value "remember" and "forget"
 
 ```
+POST /api/v1/signup
+payload:
+{username: [username], password:[password]}
+return:
+{status: 200, message: "Success"}
+{status: 409, message: "User already exist"}
 POST /api/v1/login 
 payload: 
 {username: [username], password: [password]}
@@ -52,10 +58,15 @@ return:
 ### Databases 
 ```
 Postgres
-USER_table:
-[uuid, username, password, token, token_created_time]
-Word_table:
+table name: users
+[uuid, username, password, token, token_expiration]
+tablenames: words
 [uuid, dic_uuid, user_uuid, last_review_time, next_review_time]
-Dic_table:
-[uuid, word, definition, language_A, language_B] #language is language of word, language_b is word of defination
+tablenames: dic
+[uuid, word, definition, speech_part, example,language_A, language_B] #language is language of word, language_b is word of defination
+tablesnames: team
+[uuid, team_info_uuid, user_uuid]
+tablesnames: team_info
+[uuid, name]
 ```
+Note: language_A and language_B should follow [ISO 639-1 standard language codes]("https://www.andiamo.co.uk/resources/iso-language-codes/)
