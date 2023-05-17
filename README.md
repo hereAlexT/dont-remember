@@ -31,10 +31,15 @@ return:
 {status: 401, message: "Wrong token"}
 --
 GET /api/v1/next_word 
+payload:
+{token: [token}, last_word: [word], status: [remember or forgot]}
 return: 
 {status: 404, message: "No more words"}
 {status: 200, message: "Success",word_uuid: [uuid] ,word: [word], defination: [defination]}
 {status: 401, message: "Wrong token"}
+Word Selection Priority:
+1. reviewed words
+2. new words
 --
 POST /api/v1/update_word 
 payload:
@@ -59,7 +64,7 @@ return:
 ```
 Postgres
 table name: users
-[uuid, username, password, token, token_expiration]
+[uuid, username, password, token, token_expiration, study_plan]
 tablenames: words
 [uuid, dic_uuid, user_uuid, last_review_time, next_review_time]
 tablenames: dic
@@ -70,3 +75,8 @@ tablesnames: team_info
 [uuid, name]
 ```
 Note: language_A and language_B should follow [ISO 639-1 standard language codes]("https://www.andiamo.co.uk/resources/iso-language-codes/)
+
+
+# Note:
+The defualt value of study_plan is always 20.
+
