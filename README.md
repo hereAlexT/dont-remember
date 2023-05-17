@@ -59,6 +59,29 @@ return:
 {status: 409, message: "Word already exist"}
 {status: 404, message: "Word not found"}
 {status: 401, message: "Wrong token"}
+--
+POST /api/v1/new_team # register a new team
+
+
+--
+POST /api/v1/team_man #add oir delete a team
+# add a new memebr, delete a memeber ( you can only add or delete your self) 
+# a user can only be addedto one team
+
+
+--
+GET /api/v1/team_info
+
+return:
+body: {
+team_id: [team_id],
+team_memeber: [
+"user1": {
+}
+],
+}
+
+
 ```
 ### Databases 
 ```
