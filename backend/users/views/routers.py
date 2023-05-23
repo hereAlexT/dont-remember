@@ -145,6 +145,12 @@ def logout():
 
 @users_blueprint.route("/new_team", methods=["POST"])
 def new_team():
+    """
+    1. add an entry in team_info
+    2. add my uuid to team_member
+
+    :return:
+    """
     return 200
 
 
@@ -168,5 +174,27 @@ def delete_team():
     """
     every member can delete it
     :return:
+    """
+    return 200
+
+
+@users_blueprint.route("/team_info", methods=["GET"])
+def team_info():
+    """
+    :return:
+     team number and everyone's proges
+    {
+     "team_name": "team1",
+     "team_id": "123",
+        "team_member": [
+            {
+                "username": "user1",
+                "progress": 0.5
+            },
+            {
+                "username": "user2",
+                "progress": 0.5
+            }
+    }
     """
     return 200
