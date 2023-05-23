@@ -6,8 +6,6 @@ class User(db.Model):
     uuid = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
-    token = db.Column(db.String, nullable=True)
-    token_created_time = db.Column(db.DateTime, nullable=True)
 
     def to_dict(self):
         return {

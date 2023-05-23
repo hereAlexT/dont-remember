@@ -1,7 +1,7 @@
 from . import db
 
 
-class TeamInfo(db.Model):
+class TeamMember(db.Model):
     __tablename__ = "team_member"
     uuid = db.Column(db.Integer, primary_key=True)
     team_uuid = db.Column(db.Integer, db.ForeignKey("team_info.uuid"), nullable=False)
