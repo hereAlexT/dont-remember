@@ -141,3 +141,32 @@ def logout():
     # db.session.commit()
     # logging.debug("Logout success")
     # return jsonify({"status": 200, "message": "Logout success"}), 200
+
+
+@users_blueprint.route("/new_team", methods=["POST"])
+def new_team():
+    return 200
+
+
+@users_blueprint.route("/add_me_to_team", methods=["POST"])
+def add_me_to_team():
+    return 200
+
+
+@users_blueprint.route("/update_team", methods=["POST"])
+def update_team():
+    """
+    update study plan:
+    :return:
+    """
+    return 200
+
+
+# delete team
+@users_blueprint.route("/delete_team", methods=["POST"])
+def delete_team():
+    """
+    every member can delete it
+    :return:
+    """
+    return 200
