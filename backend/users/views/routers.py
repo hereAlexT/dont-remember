@@ -111,29 +111,33 @@ def login():
 
 
 @users_blueprint.route("/logout", methods=["POST"])
+@jwt_required()
 def logout():
     """
+    By using jwt, we don't need logout in serverside
+
     :payload: {token: [token]}
     :return: {status: 404, message: "Wrong Token"}
              {status: 200, message: "Logout success"}
              {status: 401, message: "Wrong token"}
     """
-    logging.debug("Handling request for /api/v1/logout")
-    data = request.get_json()
-    token = data.get('token')
-
-    if not token:
-        logging.debug("Missing token")
-        return jsonify({"status": 400, "message": "Missing token"}), 400
-
-    user = User.query.filter_by(token=token).first()
-
-    if not user:
-        logging.debug("Wrong token")
-        return jsonify({"status": 404, "message": "Wrong token"}), 404
-
-    user.token = None
-    user.token_expiration = None
-    db.session.commit()
-    logging.debug("Logout success")
     return jsonify({"status": 200, "message": "Logout success"}), 200
+    # logging.debug("Handling request for /api/v1/logout")
+    # data = request.get_json()
+    # token = data.get('token')
+    #
+    # if not token:
+    #     logging.debug("Missing token")
+    #     return jsonify({"status": 400, "message": "Missing token"}), 400
+    #
+    # user = User.query.filter_by(token=token).first()
+    #
+    # if not user:
+    #     logging.debug("Wrong token")
+    #     return jsonify({"status": 404, "message": "Wrong token"}), 404
+    #
+    # user.token = None
+    # user.token_expiration = None
+    # db.session.commit()
+    # logging.debug("Logout success")
+    # return jsonify({"status": 200, "message": "Logout success"}), 200
