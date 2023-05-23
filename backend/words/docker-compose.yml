@@ -1,0 +1,12 @@
+version: "3.9"
+services:
+  users:
+    image: words
+    ports:
+      - "8889:8889"
+    env_file:
+      - local.env
+networks:
+  default:
+    name: dont-remember
+    external: true

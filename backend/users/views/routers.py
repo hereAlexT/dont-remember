@@ -16,6 +16,7 @@ def health_check():
     try:
         response_data = {
             "healthy": True,
+            "service": "users"
             # todo: health logic
         }
         return jsonify(response_data), 200
