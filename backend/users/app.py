@@ -1,5 +1,7 @@
 from os import environ
 from flask import Flask
+from flask_jwt_extended import JWTManager
+
 from views.routers import users_blueprint
 from models import db
 import logging
@@ -21,6 +23,8 @@ def create_app(_config_overrides=None):
         'pool_recycle': 60,
         'max_overflow': 1
     }
+    _app.config['JWT_SECRET_KEY'] = 'your-secret-key'  # Change this! #todo
+    jwt = JWTManager(_app)
 
     # debug: print all env variables in logger error
     for key, value in environ.items():

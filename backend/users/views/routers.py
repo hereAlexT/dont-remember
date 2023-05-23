@@ -1,10 +1,11 @@
 # users
-
+import datetime
 import logging
 
 from flask import Blueprint, jsonify, current_app, request
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 from models.user import User
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 from models import db
 
@@ -54,12 +55,20 @@ def signup():
         return jsonify({"status": 409, "message": "User already exists"}), 409
 
     hashed_password = generate_password_hash(password)
-    new_user = User(username=username, password=hashed_password)
+    new_user = User(uuid=uuid.uuid4(), username=username, password=hashed_password)
     db.session.add(new_user)
     db.session.commit()
 
     logging.debug("User created successfully")
     return jsonify({"status": 200, "message": "Success"}), 200
+
+
+@users_blueprint.route('/token_verify', methods=['POST'])
+@jwt_required()
+def token_verify():
+    # This point will only be reached if the token is valid
+    username = get_jwt_identity()
+    return jsonify({"status": 200, "message": "Token is valid", "username": username}), 200
 
 
 @users_blueprint.route("/login", methods=["POST"])
@@ -86,10 +95,10 @@ def login():
         return jsonify({"status": 404, "message": "User not found"}), 404
 
     if authenticate_password(user, password):
-        token = uuid.uuid4().hex
-        user.token = token
-        user.token_expiration = datetime.datetime.utcnow() + datetime.timedelta(hours=1)
-        db.session.commit()
+        expires = datetime.timedelta(hours=1)
+        # token = create_access_token(identity=username, expires_delta=expires)
+        # create a token with identity = user's uuid
+        token = create_access_token(identity=user.uuid, expires_delta=expires)
 
         logging.debug("Login success")
         return jsonify({
