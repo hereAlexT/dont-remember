@@ -181,27 +181,83 @@ def new_team():
 
 
 @users_blueprint.route("/add_me_to_team", methods=["POST"])
+@jwt_required()
 def add_me_to_team():
-    return 200
+    """
+    add me to a team
+    {
+        "team_uuid": [UUID]
+    }
+    :return:
+    """
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        team_uuid = data.get('team_uuid')
+
+        # add a new entry in team_memember
+        # {uuid, team_uuid, user_uuid}
+        _new_team_member = TeamMember(uuid=uuid.uuid4(), team_uuid=team_uuid, user_uuid=user_id)
+        db.session.add(_new_team_member)
+        db.session.commit()
+
+        return jsonify({"status": 200, "message": "Success"}), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
+
+
+@users_blueprint.route("/leave_team", methods=["POST"])
+@jwt_required()
+def leave_team():
+    """
+    {
+        "team_uuid": [UUID]
+    }
+    :return:
+    """
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        team_uuid = data.get('team_uuid')
+
+        # delete the entry in team_member
+        # {uuid, team_uuid, user_uuid}
+        _team_member = TeamMember.query.filter_by(team_uuid=team_uuid, user_uuid=user_id).first()
+        db.session.delete(_team_member)
+        db.session.commit()
+        return jsonify({"status": 200, "message": "Success"}), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
 
 
 @users_blueprint.route("/update_team", methods=["POST"])
+@jwt_required()
 def update_team():
     """
-    update study plan:
+    :payload:
+    {
+        "team_uuid": [UUID],
+        "study_plan": [plan,int]
+    }
     :return:
     """
-    return 200
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        study_plan = data.get('study_plan')
+        team_uuid = data.get('team_uuid')
 
-
-# delete team
-@users_blueprint.route("/delete_team", methods=["POST"])
-def delete_team():
-    """
-    every member can delete it
-    :return:
-    """
-    return 200
+        # update the entry in team_info
+        # {uuid, name, plan}
+        _team_info = TeamInfo.query.filter_by(uuid=team_uuid).first()
+        _team_info.plan = study_plan
+        db.session.commit()
+        return jsonify({"status": 200, "message": "Success"}), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
 
 
 @users_blueprint.route("/team_info", methods=["GET"])
