@@ -5,6 +5,8 @@ import logging
 from flask import Blueprint, jsonify, current_app, request
 from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, create_access_token
 from models.user import User
+from models.team_info import TeamInfo
+from models.team_member import TeamMember
 from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 from models import db
@@ -67,8 +69,8 @@ def signup():
 @jwt_required()
 def token_verify():
     # This point will only be reached if the token is valid
-    username = get_jwt_identity()
-    return jsonify({"status": 200, "message": "Token is valid", "username": username}), 200
+    user_id = get_jwt_identity()
+    return jsonify({"status": 200, "message": "Token is valid", "user_id": user_id}), 200
 
 
 @users_blueprint.route("/login", methods=["POST"])
@@ -144,6 +146,7 @@ def logout():
 
 
 @users_blueprint.route("/new_team", methods=["POST"])
+@jwt_required()
 def new_team():
     """
     1. add an entry in team_info
@@ -151,7 +154,30 @@ def new_team():
 
     :return:
     """
-    return 200
+
+    try:
+        # get the json content
+        data = request.get_json()
+        name = data.get('name')
+        plan = data.get('plan')
+
+        # add a new entry in team_info
+        # {uuid, name, plan}
+        _new_team = TeamInfo(uuid=uuid.uuid4(), name=name, plan=plan)
+        db.session.add(_new_team)
+        db.session.commit()
+
+        user_id = get_jwt_identity()
+        # add my uuid to team_member
+        # {uuid, team_uuid, user_uuid}
+        _new_team_member = TeamMember(uuid=uuid.uuid4(), team_uuid=_new_team.uuid, user_uuid=user_id)
+        db.session.add(_new_team_member)
+        db.session.commit()
+
+        return jsonify({"status": 200, "message": "Success"}), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
 
 
 @users_blueprint.route("/add_me_to_team", methods=["POST"])
