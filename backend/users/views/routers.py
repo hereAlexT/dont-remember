@@ -1,3 +1,5 @@
+# users
+
 import logging
 
 from flask import Blueprint, jsonify, current_app, request
@@ -27,7 +29,7 @@ def authenticate_password(user, password):
     return check_password_hash(user.password, password)
 
 
-@app.route("/signup", methods=["POST"])
+@users_blueprint.route("/signup", methods=["POST"])
 def signup():
     """
     Sign up a new user
@@ -59,7 +61,7 @@ def signup():
     return jsonify({"status": 200, "message": "Success"}), 200
 
 
-@app.route("/login", methods=["POST"])
+@users_blueprint.route("/login", methods=["POST"])
 def login():
     """
     :payload: {username: [username], password: [password]}
@@ -98,7 +100,7 @@ def login():
         return jsonify({"status": 401, "message": "Wrong password"}), 401
 
 
-@app.route("/logout", methods=["POST"])
+@users_blueprint.route("/logout", methods=["POST"])
 def logout():
     """
     :payload: {token: [token]}
