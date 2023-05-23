@@ -56,4 +56,4 @@ if __name__ == '__main__':
     # Create the Flask application instance with the configuration overrides.
     app = create_app(_config_overrides=config_overrides)
 
-    app.run(debug=True)
+    app.run(debug=True, port=8889)
