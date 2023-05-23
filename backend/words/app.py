@@ -1,5 +1,6 @@
 from os import environ
 from flask import Flask
+from flask_jwt_extended import JWTManager
 from views.routers import words_blueprint
 from models import db
 import logging
@@ -22,6 +23,8 @@ def create_app(_config_overrides=None):
         'pool_recycle': 60,
         'max_overflow': 1
     }
+    _app.config['JWT_SECRET_KEY'] = environ.get('JWT_SECRET_KEY')  # Change this! #todo
+    jwt = JWTManager(_app)
 
     # debug: print all env variables in logger error
     for key, value in environ.items():
@@ -49,7 +52,8 @@ def wsgi_app(_environ, start_response):
 
 if __name__ == '__main__':
     config_overrides = {
-        'SQLALCHEMY_DATABASE_URI': "postgresql://postgres:postgres@127.0.0.1:5432/dont_remember"
+        'SQLALCHEMY_DATABASE_URI': "postgresql://postgres:postgres@127.0.0.1:5432/dont_remember",
+        'JWT_SECRET_KEY': "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJmcmVzaCI6ZmFsc2UsImlhdCI6MTY4NDgzMDI5NywianRpI"
     }
     # get environment form local.env file
 
