@@ -74,19 +74,97 @@ def add_new_word():
     return jsonify({"status": 200, "message": "Word added successfully"}), 200
 
 
-
 @words_blueprint.route('/next_word', methods=['GET'])
 def next_word():
-    # Get token from body
-    # Retrive next word
-    return 200
+    """
+    Always return the word in the word_list of curr_user with the smallest next_review_time
+
+    :return: {
+            "word": word,
+            "next_review_time": next_review_time,
+            }
+    """
+    user_id = get_jwt_identity()
+
+    # check the existence of the user in the database
+    user = User.query.filter_by(uuid=user_id).first()
+    if not user:
+        return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
+
+    # find the word in word_list with the smallest next_review_time
+    word = WordList.query.filter_by(user_uuid=user_id).order_by(WordList.next_review_time).first()
+    if not word:
+        return jsonify({"status": 404, "message": "Word not found"}), 404
+
+    return jsonify({
+        "status": 200,
+        "word": word.word,
+        "next_review_time": word.next_review_time,
+    }), 200
 
 
 @words_blueprint.route('/update_word', methods=['POST'])
+@jwt_required()
 def update_word():
-    return 200
+    """
+    {
+        "word_list_uuid": [uuid],
+        "result": ["Remember" | "Forget"]
+    }
+    :return:
+    """
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    word_list_uuid = data.get('word_list_uuid')
+    result = data.get('result')
+
+    # check the existence of the user in the database
+    user = User.query.filter_by(uuid=user_id).first()
+    if not user:
+        return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
+
+    # check if the word_list_uuid is in the user's word list
+    word_list = WordList.query.filter_by(user_uuid=user_id, uuid=word_list_uuid).first()
+    if not word_list:
+        return jsonify({"status": 404, "message": "Word not found"}), 404
+
+    # update the word_list
+    if result == "remember":
+        word_list.last_review_time = get_curr_timestamp()
+        # next_review_time = current time + (next_review_time - last_review_time) * 2   (in sec)
+        word_list.next_review_time = get_curr_timestamp() + (
+                word_list.next_review_time - word_list.last_review_time) * 2
+    elif result == "forget":
+        word_list.last_review_time = get_curr_timestamp()
+        # next_review_time = current time + (next_review_time - last_review_time) * 0.5 (in sec)
+        word_list.next_review_time = get_curr_timestamp() + (
+                word_list.next_review_time - word_list.last_review_time) * 0.5
+    else:
+        return jsonify({"status": 400, "message": "Invalid result"}), 400
+
+    db.session.commit()
+    return jsonify({"status": 200, "message": "Word updated successfully"}), 200
 
 
 @words_blueprint.route('/word_history', methods=['GET'])
+@jwt_required()
 def word_history():
-    return 200
+    """
+    :return:  all words in the word list  of current users
+    """
+    user_id = get_jwt_identity()
+
+    # check the existence of the user in the database
+    user = User.query.filter_by(uuid=user_id).first()
+    if not user:
+        return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
+
+    # find all words in word_list of current user
+    word_list = WordList.query.filter_by(user_uuid=user_id).all()
+    if not word_list:
+        return jsonify({"status": 404, "message": "Word not found"}), 404
+
+    return jsonify({
+        "status": 200,
+        "word_list": [word.word for word in word_list],
+    }), 200
