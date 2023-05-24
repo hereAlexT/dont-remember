@@ -1,5 +1,5 @@
 import getpass
-from cmd2 import Cmd, with_argparser
+from cmd2 import Cmd, with_argparser, ansi
 import argparse
 import requests
 
@@ -8,33 +8,39 @@ WORD_URL = "http://localhost:8889/api/v1/"
 
 
 class OutputHandler:
+    def __init__(self, cmd2_app):
+        self.cmd2_app = cmd2_app
 
-    @staticmethod
-    def print_hello():
-        print("hello")
+    def print_hello(self):
+        _output = """Welcome to Don't Remember!
 
-    @staticmethod
-    def print_login_succeed(username):
-        print(f"Logged in with username: {username}")
+Login) Login [username]        
+Signup) Signup [username]
+        """
 
-    @staticmethod
-    def print_settings():
-        print("Settings command")
+        self.cmd2_app.poutput(_output)
 
-    @staticmethod
-    def print_signup(username):
-        print(f"Signed up with username: {username}")
+    def print_login_succeed(self, username):
+        _output = """Login successful!"""
+        self.cmd2_app.poutput(_output)
 
-    @staticmethod
-    def print_team():
-        print("Team command")
+    def print_settings(self):
+        _output = """Settings command"""
+        self.cmd2_app.poutput(_output)
 
-    @staticmethod
-    def print_add():
-        print("Add command")
+    def print_signup(self, username):
+        _output = f"""Signed up with username: {username}"""
+        self.cmd2_app.poutput(_output)
 
-    @staticmethod
-    def print_word(word_dict):
+    def print_team(self):
+        _output = """Team command"""
+        self.cmd2_app.poutput(_output)
+
+    def print_add(self):
+        _output = """Add command"""
+        self.cmd2_app.poutput(_output)
+
+    def print_word(self, word_dict):
         """
         word_dict:
         {
@@ -45,12 +51,26 @@ class OutputHandler:
         :param word_dict:
         :return:
         """
+
         print(f"Current word: {list(word_dict.keys())[0]}")
         print(f"Definition: {list(word_dict.values())[0]}")
 
     @staticmethod
-    def print_help():
-        print("""help""")
+    def print_help(self):
+        _output = """Help command"""
+        self.cmd2_app.poutput(_output)
+
+    @staticmethod
+    def color_red(self, text):
+        return ansi.style(text, fg=ansi.Fg.RED)
+
+    @staticmethod
+    def bold(self, text):
+        return ansi.style(text, bold=True)
+
+    @staticmethod
+    def italic(self, text):
+        return ansi.style(text, italic=True)
 
 
 class RequestHandler:
@@ -96,11 +116,13 @@ class AppShell(Cmd):
         super().__init__()
         self.logged_in = False
         self.word_dict = {"word": "this is definition"}
-        self.outputHandler = OutputHandler()
-        self.requestHandler = RequestHandler()
+        self.output_handler = OutputHandler(self)
+        self.request_handler = RequestHandler()
+        self.set_window_title("Don't Remember")
+        self.prompt = "[Don't Remember] >> "
 
     def preloop(self):
-        self.outputHandler.print_hello()
+        self.output_handler.print_hello()
 
     login_parser = argparse.ArgumentParser()
     login_parser.add_argument('username', type=str, help='Username to login')
