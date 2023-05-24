@@ -2,6 +2,7 @@ import getpass
 from cmd2 import Cmd, with_argparser, ansi
 import argparse
 import requests
+import os
 
 USER_URL = "http://localhost:8888/api/v1/"
 WORD_URL = "http://localhost:8889/api/v1/"
@@ -51,6 +52,7 @@ Signup) Signup [username]
         :param word_dict:
         :return:
         """
+        os.system('cls' if os.name == 'nt' else 'clear')  # This line clears the screen
 
         print(f"Current word: {list(word_dict.keys())[0]}")
         print(f"Definition: {list(word_dict.values())[0]}")
