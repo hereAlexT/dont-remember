@@ -3,40 +3,87 @@ from cmd2 import Cmd, with_argparser
 import argparse
 import requests
 
-
-def print_login(username):
-    print(f"Logged in with username: {username}")
-
-
-def print_settings():
-    print("Settings command")
+USER_URL = "http://localhost:8888/api/v1/"
+WORD_URL = "http://localhost:8889/api/v1/"
 
 
-def print_signup(username):
-    print(f"Signed up with username: {username}")
+class OutputHandler:
+    @staticmethod
+    def print_login(username):
+        print(f"Logged in with username: {username}")
+
+    @staticmethod
+    def print_settings():
+        print("Settings command")
+
+    @staticmethod
+    def print_signup(username):
+        print(f"Signed up with username: {username}")
+
+    @staticmethod
+    def print_team():
+        print("Team command")
+
+    @staticmethod
+    def print_add():
+        print("Add command")
+
+    @staticmethod
+    def print_word(word_dict):
+        """
+        word_dict:
+        {
+            "word": "this is definition"
+        }
 
 
-def print_team():
-    print("Team command")
+        :param word_dict:
+        :return:
+        """
+        print(f"Current word: {list(word_dict.keys())[0]}")
+        print(f"Definition: {list(word_dict.values())[0]}")
+
+    @staticmethod
+    def print_help():
+        print("""help""")
 
 
-def print_add():
-    print("Add command")
+class RequestHandler:
+    @staticmethod
+    def request_login(username, password):
+        """
+        :param username:
+        :param password:
+        :return:
+        """
+        response = requests.get('https://api.example.com/check_login',
+                                params={'username': username, 'password': password})
+        data = response.json()
+        return data
 
+    @staticmethod
+    def request_signup(username, password):
+        """
+        :param username:
+        :param password:
+        :return:
+        """
+        response = requests.get('https://api.example.com/check_login',
+                                params={'username': username, 'password': password})
+        data = response.json()
+        return data
 
-def print_word(word_dict):
-    """
-    word_dict:
-    {
-        "word": "this is definition"
-    }
-
-
-    :param word_dict:
-    :return:
-    """
-    print(f"Current word: {list(word_dict.keys())[0]}")
-    print(f"Definition: {list(word_dict.values())[0]}")
+    @staticmethod
+    def request_team():
+        """
+        :param username:
+        :param password:
+        :return:
+        """
+        response = requests.get('https://api.example.com/check_login',
+                                params={'username': username, 'password': password})
+        data = response.json()
+        return data
 
 
 class AppShell(Cmd):
