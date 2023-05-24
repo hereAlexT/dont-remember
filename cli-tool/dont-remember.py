@@ -8,8 +8,13 @@ WORD_URL = "http://localhost:8889/api/v1/"
 
 
 class OutputHandler:
+
     @staticmethod
-    def print_login(username):
+    def print_hello():
+        print("hello")
+
+    @staticmethod
+    def print_login_succeed(username):
         print(f"Logged in with username: {username}")
 
     @staticmethod
@@ -91,13 +96,11 @@ class AppShell(Cmd):
         super().__init__()
         self.logged_in = False
         self.word_dict = {"word": "this is definition"}
+        self.outputHandler = OutputHandler()
+        self.requestHandler = RequestHandler()
 
     def preloop(self):
-        print("""
-Don't Remember
-login) Login
-signup) Signup
-        """)
+        self.outputHandler.print_hello()
 
     login_parser = argparse.ArgumentParser()
     login_parser.add_argument('username', type=str, help='Username to login')
