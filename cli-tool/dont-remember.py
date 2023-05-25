@@ -53,13 +53,13 @@ Signup) Signup [username]
         :return:
         """
         os.system('cls' if os.name == 'nt' else 'clear')  # This line clears the screen
+        _output = f"""Current word: {list(word_dict.keys())[0]}
+Definition: {list(word_dict.values())[0]}"""
+        self.cmd2_app.poutput(_output)
 
-        print(f"Current word: {list(word_dict.keys())[0]}")
-        print(f"Definition: {list(word_dict.values())[0]}")
-
-    @staticmethod
     def print_help(self):
-        _output = """Help command"""
+        self.clear_count += 1
+        _output = f"""Help command {self.clear_count}"""
         self.cmd2_app.poutput(_output)
 
     @staticmethod
