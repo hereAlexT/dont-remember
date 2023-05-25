@@ -21,8 +21,8 @@ class TestUser(unittest.TestCase):
     @staticmethod
     def create_user():
         # create a random username and password
-        username = TestWord.generate_random_string(10)
-        password = TestWord.generate_random_string(10)
+        username = TestUser.generate_random_string(10)
+        password = TestUser.generate_random_string(10)
         # create a new user
         response = requests.post(user_endpoint + '/signup', json={
             "username": username,
@@ -53,6 +53,29 @@ class TestUser(unittest.TestCase):
         print(response.json())
         assert response.status_code == 200, f"Add new word failed with status code {response.status_code}"
         return 200
+
+    @staticmethod
+    def next_word(token):
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        response = requests.get(word_endpoint + '/next_word', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"Next word failed with status code {response.status_code}"
+        return response.json()['word']
+
+    @staticmethod
+    def update_word(token, word, result="remember"):
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        payload = {
+            "word": word,
+            "result": result
+        }
+        response = requests.put(word_endpoint + '/update_word', headers=headers, json=payload)
+        print(response.json())
+        assert response.status_code == 200, f"Update word failed with status code {response.status_code}"
 
     # create a pytest test that checks the user_endpoint with /health, expecting a 200 response
     def test_user_health(self):
@@ -311,3 +334,53 @@ class TestUser(unittest.TestCase):
         response = requests.get(user_endpoint + '/team_info', headers=headers_1)
         assert response.status_code == 200, f"User team_info failed with status code {response.status_code}"
         assert response.json()["plan"] == 30, f"User team_info failed with status code {response.status_code}"
+
+    def test_user_progress(self):
+        """
+        visit the endpoint \personal_progress it should show 200 with peronal progres
+        :return:
+        """
+        # create a user and login
+        username, password = TestUser.create_user()
+        token = TestUser.login(username, password)
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        # get the personal progress
+        response = requests.get(user_endpoint + '/personal_progress', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"User personal_progress failed with status code {response.status_code}"
+        # the return json should has a status==200, the studied_today which is 0 and plan which is 20
+        assert response.json()[
+                   "status"] == 200, f"User personal_progress failed with status code {response.status_code}"
+        assert response.json()[
+                   "studied_today"] == 0, f"User personal_progress failed with status code {response.status_code}"
+        assert response.json()["plan"] == 20, f"User personal_progress failed with status code {response.status_code}"
+
+        _words = ["hello", "world", "good", "job", "excellent", "nice", "reference", "model", "algorithm", "happy"]
+        for w in _words:
+            TestUser.add_new_word(token, w)
+        response = requests.get(user_endpoint + '/personal_progress', headers=headers)
+        assert response.status_code == 200, f"User personal_progress failed with status code {response.status_code}"
+        # the return json should has a status==200, the studied_today which is 0 and plan which is 20
+        assert response.json()[
+                   "status"] == 200, f"User personal_progress failed with status code {response.status_code}"
+        assert response.json()[
+                   "studied_today"] == 0, f"User personal_progress failed with status code {response.status_code}"
+        print(response.json())
+        # visit next word endpoint for 3 times
+        for i in range(3):
+            word = TestUser.next_word(token)
+            TestUser.update_word(token, word, "remember")
+        word = TestUser.next_word(token)
+        TestUser.update_word(token, word, "forget")
+
+        # check the progress again
+        response = requests.get(user_endpoint + '/personal_progress', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"User personal_progress failed with status code {response.status_code}"
+        # the return json should has a status==200, the studied_today which is 0 and plan which is 20
+        assert response.json()[
+                   "status"] == 200, f"User personal_progress failed with status code {response.status_code}"
+        assert response.json()[
+                   "studied_today"] == 4, f"User personal_progress failed with status code {response.status_code}"

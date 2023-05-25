@@ -66,7 +66,7 @@ def add_new_word():
         uuid=uuid.uuid4(),
         word=word,
         user_uuid=user_id,
-        last_review_time=get_curr_timestamp(),
+        last_review_time=get_curr_timestamp() - timedelta(days=1),
         next_review_time=get_curr_timestamp() + timedelta(minutes=1)
     )
     db.session.add(new_word)
@@ -108,7 +108,7 @@ def next_word():
         return jsonify({"error": e}), 500
 
 
-@words_blueprint.route('/update_word', methods=['POST'])
+@words_blueprint.route('/update_word', methods=['PUT'])
 @jwt_required()
 def update_word():
     """
@@ -135,15 +135,16 @@ def update_word():
         return jsonify({"status": 404, "message": "Word not found"}), 404
 
     # update the word_list
+    current_time = get_curr_timestamp()
     if result == "remember":
-        word_list.last_review_time = get_curr_timestamp()
+        word_list.last_review_time = current_time
         # next_review_time = current time + (next_review_time - last_review_time) * 2   (in sec)
-        word_list.next_review_time = get_curr_timestamp() + (
+        word_list.next_review_time = current_time + (
                 word_list.next_review_time - word_list.last_review_time) * 2
     elif result == "forget":
-        word_list.last_review_time = get_curr_timestamp()
+        word_list.last_review_time = current_time
         # next_review_time = current time + (next_review_time - last_review_time) * 0.5 (in sec)
-        word_list.next_review_time = get_curr_timestamp() + (
+        word_list.next_review_time = current_time + (
                 word_list.next_review_time - word_list.last_review_time) * 0.5
     else:
         return jsonify({"status": 400, "message": "Invalid result"}), 400
@@ -180,7 +181,6 @@ def delete_word():
     db.session.delete(word_list)
     db.session.commit()
     return jsonify({"status": 200, "message": "Word deleted successfully"}), 200
-
 
 
 @words_blueprint.route('/word_history', methods=['GET'])

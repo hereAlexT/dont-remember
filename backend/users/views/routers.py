@@ -12,6 +12,8 @@ from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 from models import db
 import traceback
+from datetime import datetime, timedelta
+
 
 users_blueprint = Blueprint("users", __name__)
 
@@ -99,7 +101,7 @@ def login():
         return jsonify({"status": 404, "message": "User not found"}), 404
 
     if authenticate_password(user, password):
-        expires = datetime.timedelta(minutes=10)
+        expires = timedelta(minutes=10)
         # token = create_access_token(identity=username, expires_delta=expires)
         # create a token with identity = user's uuid
         token = create_access_token(identity=user.uuid, expires_delta=expires)
@@ -325,7 +327,7 @@ def team_info():
 
 @users_blueprint.route("/personal_progress", methods=["GET"])
 @jwt_required()
-def personal_progres():
+def personal_progress():
     """
     check personal progress
     :return: {
@@ -334,18 +336,22 @@ def personal_progres():
     "plan": 20,
     }
     """
-    user_id = get_jwt_identity()
-    # get the study plan in user
-    _user = User.query.filter_by(uuid=user_id).first()
-    study_plan = _user.study_plan
+    try:
+        user_id = get_jwt_identity()
+        # get the study plan in user
+        _user = User.query.filter_by(uuid=user_id).first()
+        plan = _user.plan
 
-    check_num_of_words_studied_today(user_id)
-    output = {
-        "status": 200,
-        "studied_today": check_num_of_words_studied_today(user_id),
-        "plan": study_plan,
-    }
-    return jsonify(output), 200
+        check_num_of_words_studied_today(user_id)
+        output = {
+            "status": 200,
+            "studied_today": check_num_of_words_studied_today(user_id),
+            "plan": plan,
+        }
+        return jsonify(output), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
 
 
 def check_num_of_words_studied_today(user_uuid):
@@ -354,6 +360,11 @@ def check_num_of_words_studied_today(user_uuid):
     :param user_uuid:
     :return:
     """
-    today = datetime.date.today()
-    return db.session.query(WordList).filter(WordList.user_uuid == user_uuid,
-                                             WordList.last_review_time == today).count()
+    today = datetime.today().date()
+    tomorrow = today + timedelta(days=1)
+
+    return db.session.query(WordList).filter(
+        WordList.user_uuid == user_uuid,
+        WordList.last_review_time >= today,
+        WordList.last_review_time < tomorrow
+    ).count()
