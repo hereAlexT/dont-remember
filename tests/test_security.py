@@ -1,15 +1,13 @@
+from base import user_endpoint, word_endpoint
 import pytest
 import requests
-
-pytest.localhost_user = 'http://127.0.0.1:8888/api/v1/'
-pytest.localhost_word = 'http://127.0.0.1:8889/api/v1/'
 
 @pytest.fixture(scope='session', autouse=True)
 def api_token():
     global token
     if 'token' not in globals():
         # Perform the login request and retrieve the token
-        login_url = pytest.localhost_user + 'login'
+        login_url = user_endpoint + '/login'
         data = {
             'username': 'test',
             'password': 'test'
@@ -18,7 +16,7 @@ def api_token():
         
         # Check if the login request was successful
         if response.status_code == 404:
-            signup_response = requests.post(pytest.localhost_user + 'signup', json=data)
+            signup_response = requests.post(user_endpoint + '/signup', json=data)
             assert signup_response.status_code == 200, f"Signup request failed with status code {signup_response.status_code}"
 
             response = requests.post(login_url, json=data)
@@ -34,7 +32,7 @@ def api_token():
 
 def test_add_new_word(api_token):
     # Use the token to add a new word through the API
-    api_url = pytest.localhost_word + 'add_new_word' 
+    api_url = word_endpoint + '/add_new_word' 
     headers = {
         'Authorization': f'Bearer {api_token}'
     }
@@ -48,7 +46,7 @@ def test_add_new_word(api_token):
     
 def test_next_word(api_token):
     # Use the token to add a new word through the API
-    api_url = pytest.localhost_word + 'next_word' 
+    api_url = word_endpoint + '/next_word' 
     headers = {
         'Authorization': f'Bearer {api_token}'
     }
@@ -59,7 +57,7 @@ def test_next_word(api_token):
 
 def test_update_word(api_token):
     # Use the token to add a new word through the API
-    api_url = pytest.localhost_word + 'update_word'
+    api_url = word_endpoint + '/update_word'
     headers = {
         'Authorization': f'Bearer {api_token}'
     }
@@ -74,7 +72,7 @@ def test_update_word(api_token):
 
 def test_word_history(api_token):
     # Use the token to add a new word through the API
-    api_url = pytest.localhost_word + 'word_history'
+    api_url = word_endpoint + '/word_history'
     headers = {
         'Authorization': f'Bearer {api_token}'
     }
@@ -85,7 +83,7 @@ def test_word_history(api_token):
 
 def test_add_new_word_without_token():
     # Make a request to add a new word to the API without a token
-    api_url = pytest.localhost_word + 'add_new_word' 
+    api_url = word_endpoint + '/add_new_word' 
     payload = {
         'word': 'ahorse'
     }
@@ -96,7 +94,7 @@ def test_add_new_word_without_token():
 
 def test_next_word_without_token():
     # Make a request to add a new word to the API without a token
-    api_url = pytest.localhost_word + 'next_word' 
+    api_url = word_endpoint + '/next_word' 
     response = requests.get(api_url)
     print(api_url, response.status_code)
     
@@ -105,7 +103,7 @@ def test_next_word_without_token():
 
 def test_update_word_without_token():
     # Make a request to add a new word to the API without a token
-    api_url = pytest.localhost_word + 'update_word' 
+    api_url = word_endpoint + '/update_word' 
     payload = {
         'word': 'ahorse',
         'result': 'forget'
@@ -118,12 +116,12 @@ def test_update_word_without_token():
 
 def test_word_history_without_token():
     # Make a request to add a new word to the API without a token
-    api_url = pytest.localhost_word + 'word_history' 
+    api_url = word_endpoint + '/word_history' 
     response = requests.get(api_url)
     print(api_url, response.status_code)
     
     # Check if the request returned a 401 status code (Unauthorized)
     assert response.status_code == 401, "API request without token did not return status code 401"
 
-def test_token_expiration
+#def test_token_expiration
     
