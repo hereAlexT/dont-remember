@@ -105,3 +105,11 @@ Note: language_A and language_B should follow [ISO 639-1 standard language codes
 # Note:
 The defualt value of study_plan is always 20.
 
+# depolyment
+begin deploy
+```
+terraform apply -var-file="secret.tfvars" -auto-approve
+terraform apply -var-file="secret.tfvars" -auto-approve -parallelism=20
+
+```
+
