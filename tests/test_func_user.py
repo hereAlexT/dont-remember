@@ -439,3 +439,37 @@ class TestUser(unittest.TestCase):
         # get team_info
         response = requests.get(user_endpoint + '/team_info', headers=headers_1)
         print(response.json())
+
+    def test_set_personal_plan(self):
+        """
+        1. create a user as user_1 and login with token_1
+        2. check progress (should be 20)
+        3. set plan to 30
+        4. check progress (should be 30)
+        :return:
+        """
+        # create user and login
+        username, password = TestUser.create_user()
+        token = TestUser.login(username, password)
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        # get the personal progress
+        response = requests.get(user_endpoint + '/personal_progress', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"User personal_progress failed with status code {response.status_code}"
+        # the return json should has a status==200, the studied_today which is 0 and plan which is 20
+        assert response.json()['plan'] == 20, f"User personal_progress failed with status code {response.status_code}"
+
+        # set plan to 30
+        data = {
+            "plan": 30
+        }
+        response = requests.put(user_endpoint + '/change_plan', headers=headers, json=data)
+
+        # check the progress again
+        response = requests.get(user_endpoint + '/personal_progress', headers=headers)
+
+        print(response.json())
+        assert response.status_code == 200, f"User set_personal_plan failed with status code {response.status_code}"
+        assert response.json()['plan'] == 30, f"User set_personal_plan failed with status code {response.status_code}"

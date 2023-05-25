@@ -14,7 +14,6 @@ from models import db
 import traceback
 from datetime import datetime, timedelta
 
-
 users_blueprint = Blueprint("users", __name__)
 
 
@@ -75,6 +74,31 @@ def token_verify():
     # This point will only be reached if the token is valid
     user_id = get_jwt_identity()
     return jsonify({"status": 200, "message": "Token is valid", "user_id": user_id}), 200
+
+
+@users_blueprint.route("/change_plan", methods=["PUT"])
+@jwt_required()
+def set_personal_plan():
+    """
+    input: {plan: [plan]}
+    :return:
+    """
+    try:
+        user_id = get_jwt_identity()
+        data = request.get_json()
+        plan = data.get('plan')
+
+        # check if user exists
+        user = User.query.filter_by(uuid=user_id).first()
+        if not user:
+            return jsonify({"status": 400, "message": "User not found"}), 404
+
+        # change the plan in table users
+        user.plan = plan
+        db.session.commit()
+        return jsonify({"status": 200, "message": "Success"}), 200
+    except Exception as e:
+        return jsonify({"status": 400, "message": "Error: " + str(e)}), 400
 
 
 @users_blueprint.route("/login", methods=["POST"])
