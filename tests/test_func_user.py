@@ -10,7 +10,6 @@ import random
 
 class TestUser(unittest.TestCase):
 
-    # create a pytest test that checks the user_endpoint with /health, expecting a 200 response
     @staticmethod
     def generate_random_string(length):
         # Combine all the characters we want to use
@@ -18,6 +17,42 @@ class TestUser(unittest.TestCase):
         # Use a list comprehension to generate a list of 'length' random characters
         random_string = ''.join(random.choice(characters) for _ in range(length))
         return random_string
+
+    @staticmethod
+    def create_user():
+        # create a random username and password
+        username = TestWord.generate_random_string(10)
+        password = TestWord.generate_random_string(10)
+        # create a new user
+        response = requests.post(user_endpoint + '/signup', json={
+            "username": username,
+            "password": password
+        })
+        assert response.status_code == 200, f"User creation failed with status code {response.status_code}"
+        return username, password
+
+    @staticmethod
+    def login(username, password):
+        """ login and return token"""
+        response = requests.post(user_endpoint + '/login', json={
+            "username": username,
+            "password": password
+        })
+        assert response.status_code == 200, f"User login failed with status code {response.status_code}"
+        return response.json()['token']
+
+    @staticmethod
+    def add_new_word(token, word="hello"):
+        payload = {
+            "word": word
+        }
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        response = requests.post(word_endpoint + '/add_new_word', json=payload, headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"Add new word failed with status code {response.status_code}"
+        return 200
 
     # create a pytest test that checks the user_endpoint with /health, expecting a 200 response
     def test_user_health(self):
@@ -276,9 +311,3 @@ class TestUser(unittest.TestCase):
         response = requests.get(user_endpoint + '/team_info', headers=headers_1)
         assert response.status_code == 200, f"User team_info failed with status code {response.status_code}"
         assert response.json()["plan"] == 30, f"User team_info failed with status code {response.status_code}"
-
-
-
-
-
-
