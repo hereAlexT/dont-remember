@@ -7,6 +7,7 @@ from flask_jwt_extended import JWTManager, jwt_required, get_jwt_identity, creat
 from models.user import User
 from models.team_info import TeamInfo
 from models.team_member import TeamMember
+from models.word_list import WordList
 from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 from models import db
@@ -277,11 +278,11 @@ def team_info():
         "team_member": [
             {
                 "username": "user1",
-                "progress": 0.5
+                "studied_today: 1,
             },
             {
                 "username": "user2",
-                "progress": 0.5
+                "studied_today: 2,
             }
     }
     """
@@ -297,15 +298,62 @@ def team_info():
         team_name = _team_info.name
         team_plan = _team_info.plan
 
-        # todo: get all team member progress
+        # get the team members from team_member
+        _team_members = TeamMember.query.filter_by(team_uuid=team_uuid).all()
+        team_members_info = []
+        for _team_member in _team_members:
+            # get the user info from user
+            studied_today = check_num_of_words_studied_today(_team_member.user_uuid)
+            username = User.query.filter_by(uuid=_team_member.user_uuid).first().username
+            team_members_info.append({
+                "username": username,
+                "studied_today": studied_today
+            })
+
         output_data = {
             "status": 200,
             "team_name": team_name,
             "team_uuid": team_uuid,
             "plan": team_plan,
-            "team_member": []
+            "team_member": team_members_info
         }
         return jsonify(output_data), 200
     except Exception as e:
         logging.debug("Error: {}".format(e))
         return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
+
+
+@users_blueprint.route("/personal_progress", methods=["GET"])
+@jwt_required()
+def personal_progres():
+    """
+    check personal progress
+    :return: {
+    "status": 200,
+    "studied_today": 10,
+    "plan": 20,
+    }
+    """
+    user_id = get_jwt_identity()
+    # get the study plan in user
+    _user = User.query.filter_by(uuid=user_id).first()
+    study_plan = _user.study_plan
+
+    check_num_of_words_studied_today(user_id)
+    output = {
+        "status": 200,
+        "studied_today": check_num_of_words_studied_today(user_id),
+        "plan": study_plan,
+    }
+    return jsonify(output), 200
+
+
+def check_num_of_words_studied_today(user_uuid):
+    """
+    check the number of words studied today
+    :param user_uuid:
+    :return:
+    """
+    today = datetime.date.today()
+    return db.session.query(WordList).filter(WordList.user_uuid == user_uuid,
+                                             WordList.last_review_time == today).count()
