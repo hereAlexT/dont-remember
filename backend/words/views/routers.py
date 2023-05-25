@@ -154,7 +154,7 @@ def update_word():
         word_list.last_review_time = current_time
         # next_review_time = current time + (next_review_time - last_review_time) * 2   (in sec)
         word_list.next_review_time = current_time + (
-                word_list.next_review_time - word_list.last_review_time) * 2
+                (word_list.next_review_time - word_list.last_review_time) * 2)
     elif result == "forget":
         word_list.last_review_time = current_time
         # next_review_time = current time + (next_review_time - last_review_time) * 0.5 (in sec)

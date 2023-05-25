@@ -1,142 +1,14 @@
 import getpass
-from cmd2 import Cmd, with_argparser, ansi
+import logging
+
+from cmd2 import Cmd, with_argparser
 import argparse
 import requests
-import os
 import textwrap
+from tabulate import tabulate
 
-USER_URL = "http://localhost:8888/api/v1/"
-WORD_URL = "http://localhost:8889/api/v1/"
-
-
-# Welcome Page
-class OutputHandler:
-    def __init__(self, cmd2_app):
-        self.cmd2_app = cmd2_app
-        self.clear_count = 0
-
-    def print_hello(self):
-        # The border character
-        border_char = "*"
-
-        # The width of the box
-        box_width = 40
-
-        # Prepare the welcome message
-        welcome_message = textwrap.fill("""Welcome to Don't Remember!""", box_width)
-        login_message = "\033[1m" + "1:Login)" + "\033[0m" + " Login [username]"
-        signup_message = "\033[1m" + "2:Signup)" + "\033[0m" + " Signup [username]"
-        
-        # Make sure the messages are within the box width
-        login_message = textwrap.fill(login_message, box_width)
-        signup_message = textwrap.fill(signup_message, box_width)
-
-        # Create the box lines
-        box_top = border_char * box_width
-        box_bottom = border_char * box_width
-
-        # Create the middle border
-        middle_border = border_char + " " * (box_width - 2) + border_char
-
-        # Concatenate all lines
-        _output = "\n".join([box_top, welcome_message, middle_border, login_message, signup_message, box_bottom])
-
-        self.cmd2_app.poutput(_output)
-        choice = input("Enter your choice (1 or 2): ")
-        if choice == "1":
-            while True:
-                username = input("Enter username: ")
-                password = getpass.getpass("Enter your password: ")
-                if self.cmd2_app.request_handler.request_login(username, password):
-                    self.cmd2_app.do_login(username)
-                    print("Login successful!")
-                    break
-                else:
-                    print("Your username or password is incorrect")
-        elif choice == "2":
-            while True:
-                username = input("Create a new username: ")
-                password = getpass.getpass("Set your password: ")
-                if self.cmd2_app.request_handler.request_signup(username, password):
-                    self.cmd2_app.do_signup(username)
-                    print("Signup successful!")
-                    break
-                else:
-                    print("Signup failed. Username might already exist.")
-        else:
-            self.cmd2_app.poutput("Invalid choice. Please enter 1 for login or 2 for signup.")
-
-    def color_red(self, text):
-        return ansi.style(text, fg=ansi.Fg.RED)
-
-    def bold(self, text):
-        return ansi.style(text, bold=True)
-
-    def italic(self, text):
-        return ansi.style(text, italic=True)
-
-        self.cmd2_app.poutput(_output)
-
-# login success
-    # def print_login_succeed(self, username):
-    # # Assume you have a method to get the last study time
-    # # Replace 'get_last_study_time' with your real method
-    # last_study_time = self.cmd2_app.get_last_study_time(username)
-    
-    # _output = f"Login successful! Welcome, {username}\n"
-    # _output += f"Your last study time: {last_study_time}"
-    # self.cmd2_app.poutput(_output)
-
-
-    def print_settings(self):
-        _output = """Settings command"""
-        self.cmd2_app.poutput(_output)
-
-    def print_signup(self, username):
-        _output = f"""Signed up with username: {username}"""
-        self.cmd2_app.poutput(_output)
-
-    def print_team(self):
-        _output = """Team command"""
-        self.cmd2_app.poutput(_output)
-
-    def print_add(self):
-        _output = """Add command"""
-        self.cmd2_app.poutput(_output)
-
-    def print_word(self, word_dict):
-        """
-        word_dict:
-        {
-            "word": "this is definition"
-        }
-
-
-        :param word_dict:
-        :return:
-        """
-        os.system('cls' if os.name == 'nt' else 'clear')  # This line clears the screen
-        _output = f"""Current word: {list(word_dict.keys())[0]}
-Definition: {list(word_dict.values())[0]}"""
-        self.cmd2_app.poutput(_output)
-
-    def print_help(self):
-        self.clear_count += 1
-        _output = f"""Help command {self.clear_count}"""
-        self.cmd2_app.poutput(_output)
-
-    @staticmethod
-    def color_red(self, text):
-        return ansi.style(text, fg=ansi.Fg.RED)
-
-    @staticmethod
-    def bold(self, text):
-        return ansi.style(text, bold=True)
-
-    @staticmethod
-    def italic(self, text):
-        return ansi.style(text, italic=True)
-
+USER_ENDPOINT = "http://localhost:8888/api/v1/users"
+WORD_ENDPOINT = "http://localhost:8889/api/v1/words"
 
 
 class RequestHandler:
@@ -146,6 +18,8 @@ class RequestHandler:
         self.user_url = user_endpoint
         self.word_url = word_endpoint
         self.header = {}
+        self.user_uuid = None
+        self.team_uuid = None
 
     def get_header(self, token):
         if token is None:
@@ -208,7 +82,18 @@ class RequestHandler:
             self.header = self.get_header(self.token)
         return response.json()
 
-    def new_team(self, name: str, plan: int):
+    def change_plan(self, plan):
+        """
+        endpoint user /set_personal_plan
+        :param plan:
+        :return:
+        """
+        response = requests.put(USER_ENDPOINT + '/change_plan', json={
+            "plan": plan
+        }, headers=self.header)
+        return response.json()
+
+    def new_team(self, name: str, plan: int = 20):
         """
         visit endpoint user /new_team
         :param plan:
@@ -256,6 +141,7 @@ class RequestHandler:
         """
         payload = {
             "team_uuid": team_uuid,
+            "plan": plan
         }
 
         response = requests.post(USER_ENDPOINT + '/update_team', json=payload, headers=self.header)
@@ -264,7 +150,6 @@ class RequestHandler:
     def team_info(self):
         """
         visit user /team_info
-        :param token:
         :return:
         """
         response = requests.get(USER_ENDPOINT + '/team_info', headers=self.header)
@@ -273,7 +158,6 @@ class RequestHandler:
     def personal_progress(self):
         """
         visit user /personal_progress
-        :param token:
         :return:
         """
         response = requests.get(USER_ENDPOINT + '/personal_progress', headers=self.header)
@@ -294,7 +178,6 @@ class RequestHandler:
     def next_word(self):
         """
         visit endpoint user next_word
-        :param token:
         :return:
         """
 
@@ -336,85 +219,494 @@ class RequestHandler:
         return response.json()
 
 
+# Welcome Page
+class OutputHandler:
+    def __init__(self, cmd2_app):
+        self.cmd2_app = cmd2_app
+        self.clear_count = 0
+
+    border_char = "*"
+    box_width = 40
+    box_top = border_char * box_width
+
+    def print_hello(self):
+        welcome_message = textwrap.fill("""Welcome to Don't Remember!""", self.box_width)
+        command_message = textwrap.fill("""Use the following commands.""", self.box_width)
+
+        login_message = "- login [username]"
+        signup_message = "- signup [username]"
+        help_message = "- help -v"
+
+        # Make sure the messages are within the box width
+        login_message = textwrap.fill(login_message, self.box_width)
+        middle_border = self.border_char + " " * (self.box_width - 2) + self.border_char
+        signup_message = textwrap.fill(signup_message, self.box_width)
+
+        box_bottom = self.border_char * self.box_width
+
+        # Concatenate all lines
+        _output = "\n".join(
+            [self.box_top, welcome_message, command_message, middle_border, login_message, signup_message, help_message,
+             middle_border, box_bottom])
+
+        self.cmd2_app.poutput(_output)
+
+    def print_word(self, word_dict):
+        """
+        word_dict:
+        {
+            "word": "this is definition"
+        }
+        :param word_dict:
+        :return:
+        """
+        word = word_dict["word"]
+        meanings = word_dict["meanings"]
+
+        # Prepare the header and footer
+        header = f"{'-' * ((50 - len(word)) // 2)}-> \033[31m\033[1m{word}\033[0m <-{'-' * ((50 - len(word)) // 2)}"
+        # 31 for red, 1 for bold
+
+        # Start with the header
+        _output = header
+
+        for i, meaning in enumerate(meanings, 1):
+            _output += f"\n{i}.\n"
+            _output += f"\033[34m\033[3m{meaning['speech_part']}\033[0m\n"  # 34 for blue, 3 for italic
+            _output += f"{meaning['definition']}\n"
+            # add example, if it exists
+            if "example" in meaning:
+                _output += f"· {meaning['example']}\n"
+            _output += "-" * len(header)  # Add the line separator
+        _output += "\nUse command '\033[1m\033[3mupdateword remember\033[0m' or '\033[1m\033[3mupdateword forget\033[0m' to update the word."
+        self.cmd2_app.poutput(_output)
+
+    def print_learning_history(self, response):
+        """
+        response: {'history': [{'last_review_time': '...', 'next_review_time': '...', 'uuid': '...', 'word': '...'}]}
+        """
+        history = response['history']
+
+        # Extract the data we care about into a list of dictionaries.
+        history_data = [
+            {'Word': h['word'], 'Last Review Time': h['last_review_time'], 'Next Review Time': h['next_review_time'],
+             'UUID': h['uuid']} for h in history]
+
+        # Use tabulate to create a table from the data. "pipe" is the table format.
+        table = tabulate(history_data, headers="keys", tablefmt="pipe", showindex="always")
+
+        # Print the table
+        self.cmd2_app.poutput(table)
+
+    from tabulate import tabulate
+
+    def print_teaminfo(self, response):
+        """
+        response:
+        {
+            'plan': 20,
+            'status': 200,
+            'team_member': [{'studied_today': 1, 'username': 'b'}],
+            'team_name': 'teng',
+            'team_uuid': '00372df8-a100-4ee3-b58a-769baec93367'
+        }
+        """
+        # Extract the data we care about into a list of dictionaries.
+        member_data = [{'Username': m['username'], 'Studied Today': m['studied_today']} for m in
+                       response['team_member']]
+
+        # Use tabulate to create a table from the data. "pipe" is the table format.
+        table = tabulate(member_data, headers="keys", tablefmt="pipe", showindex="always")
+
+        # Print the team name, uuid, and table
+        self.cmd2_app.poutput(f"Team Name: {response['team_name']}")
+        self.cmd2_app.poutput(f"Team UUID: {response['team_uuid']}")
+        self.cmd2_app.poutput(f"Plan: {response['plan']}")
+        self.cmd2_app.poutput("\nMember Info:")
+        self.cmd2_app.poutput(table)
+
+    from tabulate import tabulate
+
+    def print_team_info(self, response):
+        """
+        response:
+        {
+            'plan': 20,
+            'status': 200,
+            'team_member': [{'studied_today': 1, 'username': 'b'}],
+            'team_name': 'teng',
+            'team_uuid': '00372df8-a100-4ee3-b58a-769baec93367'
+        }
+        """
+        # Extract the data we care about into a list of dictionaries.
+        member_data = [{'Username': m['username'], 'Studied Today': m['studied_today']} for m in
+                       response['team_member']]
+
+        # Use tabulate to create a table from the data. "pipe" is the table format.
+        table = tabulate(member_data, headers="keys", tablefmt="pipe", showindex="always")
+
+        # Print the team name, uuid, and table
+        self.cmd2_app.poutput(f"Team Name: {response['team_name']}")
+        self.cmd2_app.poutput(f"Team UUID: {response['team_uuid']}")
+        self.cmd2_app.poutput(f"Plan: {response['plan']}")
+        self.cmd2_app.poutput("\nMember Info:")
+        self.cmd2_app.poutput(table)
+
+    @staticmethod
+    def print_bold_red(text):
+        print("\033[1;31m" + text + "\033[0m")
+
 
 class AppShell(Cmd):
+
     def __init__(self):
         super().__init__()
+        del Cmd.do_shell
+        del Cmd.do_run_script
+        del Cmd.do_edit
+        del Cmd.do_py
+        del Cmd.do_alias
+        del Cmd.do_shortcuts
+        del Cmd.do_macro
+        del Cmd.do_history
+        del Cmd.do_run_pyscript
+        self.hidden_commands.append('set')
+
         self.logged_in = False
-        self.word_dict = {"word": "this is definition"}
         self.output_handler = OutputHandler(self)
         self.request_handler = RequestHandler()
         self.set_window_title("Don't Remember")
-        self.prompt = "[Don't Remember] >> "
+        self.prompt = ">> "
+        self.current_word = None
 
     def preloop(self):
         self.output_handler.print_hello()
 
-    help_parser= argparse.ArgumentParser()
-    help_parser.add_argument('help2', type=str, help='Command to get help for')
-
     login_parser = argparse.ArgumentParser()
-    login_parser.add_argument('username', type=str, help='Username to login')
+    login_parser.add_argument('username', type=str, help='login [username]')
 
     @with_argparser(login_parser)
     def do_login(self, args):
         """Login as user"""
         if self.logged_in:
-            print("Already logged in")
+            self.output_handler.print_bold_red("Logout first before you login!")
             return
+        password = getpass.getpass(prompt='Password: ', stream=None)
+        logging.info(f"Login with username: {args.username} and password: {password}")
+        # request to login endpoint
+        response = self.request_handler.login(args.username, password)
 
-        # password = getpass.getpass(prompt='Password: ', stream=None)
-        # response = requests.get('https://api.example.com/check_login', params={'username': args.username, 'password': password})
-        # data = response.json()
-
-        if True:
+        if response['status'] == 200:
             self.logged_in = True
-            print("Login successful")
-            print("*************************************")
-            print(f"Current word: {list(self.word_dict.keys())[0]}")
-            print(f"Definition: {list(self.word_dict.values())[0]}")
+            self.poutput("Login success")
+            # self.fetch_next_word()
         else:
-            print("Login failed")
+            self.output_handler.print_bold_red(response['message'])
+
+    logout_parser = argparse.ArgumentParser()
+
+    @with_argparser(logout_parser)
+    def do_logout(self, args):
+        """
+        Logout
+        :param args:
+        :return:
+        """
+        # check if logged in
+        if not self.logged_in:
+            self.poutput("Not logged in")
+            return
+        # request to logout endpoint
+        self.request_handler = RequestHandler()
+        self.logged_in = False
+        self.poutput("Logout success")
+        self.output_handler.print_hello()
 
     signup_parser = argparse.ArgumentParser()
-    signup_parser.add_argument('username', type=str, help='Username for signup')
+    signup_parser.add_argument('username', type=str, help='signup [username]')
 
     @with_argparser(signup_parser)
     def do_signup(self, args):
         """Sign up as new user"""
         if self.logged_in:
-            print("Already logged in")
+            self.poutput("Already logged in, please logout first")
             return
-
+        username = args.username
         password = getpass.getpass(prompt='Password: ', stream=None)
-        print(f"Signed up with username: {args.username} and password: {password}")
+        logging.info(f"Signup with username: {username} and password: {password}")
+        # request to signup endpoint
+        response = self.request_handler.signup(username, password)
 
-    def do_settings(self, arg):
-        """Settings command"""
-        if not self.logged_in:
-            print("You need to be logged in to access settings")
-            return
-        print("Settings command")
+        if response['status'] == 200:
+            self.poutput("Signup success, Please login to continue")
+        else:
+            self.poutput("Signup failed, please try again...")
+            self.output_handler.print_bold_red(response['message'])
 
-    def do_team(self, arg):
+    add_parser = argparse.ArgumentParser()
+    add_parser.add_argument('add', type=str, help='Add a word.')
+
+    @with_argparser(add_parser)
+    def do_add(self, arg):
         """
-        Team command, need to show graph 5.
-        1. request xxx endpoitn and getxxx
-        2. requet xx end adn xxx
+        Add a new word.
         :param arg:
         :return:
         """
         if not self.logged_in:
-            print("You need to be logged in to access team")
+            self.output_handler.print_bold_red("Not logged in")
             return
-        print("Team command")
 
-    def do_add(self, arg):
-        """Add command"""
+        word = arg.add
+        response = self.request_handler.add_new_word(word)
+        if response['status'] == 200:
+            self.poutput("Add word success.")
+            # self.fetch_next_word()
+        else:
+            self.output_handler.print_bold_red(response['message'])
+
+    changeteamplan_parser = argparse.ArgumentParser()
+    changeteamplan_parser.add_argument('team_uuid', type=str, help='Team uuid')
+    changeteamplan_parser.add_argument('new_plan', type=int, help='New plan')
+
+    @with_argparser(changeteamplan_parser)
+    def do_changeteamplan(self, arg):
+        """
+        Set team plan, and the plan is an integer
+        """
         if not self.logged_in:
-            print("You need to be logged in to use add")
+            print("You need to be logged in to access settings")
             return
-        print("Add command")
+        # fetch the plan from arg
+        team_uuid = arg.team_uuid
+        plan = arg.new_plan
+        response = self.request_handler.update_team(team_uuid, plan)
+        if response['status'] == 200:
+            self.poutput("Set plan success")
+            # self.fetch_next_word()
+        else:
+            self.poutput("Set plan failed, please try again...")
+            self.output_handler.print_bold_red(response['message'])
+
+    changeplan_parser = argparse.ArgumentParser()
+    changeplan_parser.add_argument('new_plan', type=int, help='New Plan')
+
+    @with_argparser(changeplan_parser)
+    def do_changeplan(self, arg):
+        """
+        Set personal plan, and the plan is an integer
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        plan = arg.new_plan
+        response = self.request_handler.change_plan(plan)
+        if response['status'] == 200:
+            self.poutput("Set plan success")
+            # self.fetch_next_word()
+        else:
+            self.poutput("Set plan failed, please try again...")
+            self.output_handler.print_bold_red(response['message'])
+
+    teaminfo_parser = argparse.ArgumentParser()
+
+    @with_argparser(teaminfo_parser)
+    def do_teaminfo(self, arg):
+        """
+        Check team information.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        response = self.request_handler.team_info()
+        if response['status'] == 200:
+            self.output_handler.print_teaminfo(response)
+
+        else:
+            self.poutput("Check team Information failed, are you in team?")
+            self.output_handler.print_bold_red(response['message'])
+
+
+    learninghistory_parser = argparse.ArgumentParser()
+
+    @with_argparser(learninghistory_parser)
+    def do_learninghistory(self, arg):
+        """
+        Display Learning History.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        response = self.request_handler.word_history()
+        if response['status'] == 200:
+            self.output_handler.print_learning_history(response)
+
+
+        else:
+            self.poutput("Check learning history failed")
+            self.output_handler.print_bold_red(response['message'])
+
+    addteam_parser = argparse.ArgumentParser()
+    addteam_parser.add_argument('team_uuid', type=str, help='addteam [team_uuid]')
+
+    @with_argparser(addteam_parser)
+    def do_addteam(self, arg):
+        """
+        Add me to a existing team.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        team_uuid = arg.team_uuid
+        response = self.request_handler.add_me_to_team(team_uuid)
+        if response['status'] == 200:
+            self.poutput("Add team success")
+        else:
+            self.poutput("Add team failed")
+            self.output_handler.print_bold_red(response['message'])
+
+
+    personalprogress = argparse.ArgumentParser()
+
+    @with_argparser(personalprogress)
+    def do_personalprogress(self, arg):
+        """
+        Check personal progress.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        response = self.request_handler.personal_progress()
+        if response['status'] == 200:
+            self.poutput(f"--> You have learned \033[31m\033[1m{response['studied_today']}/{response['plan']}\033[0m, today.")
+
+        else:
+            self.poutput("Check current progress failed")
+            self.output_handler.print_bold_red(response['message'])
+
+    deleteword_parser = argparse.ArgumentParser()
+    deleteword_parser.add_argument('word', type=str, help='Delete word.')
+
+    @with_argparser(deleteword_parser)
+    def do_deleteword(self, arg):
+        """
+        Delete a word.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        word = arg.word
+        response = self.request_handler.delete_word(word)
+        if response['status'] == 200:
+
+            self.poutput("Delete word success")
+        else:
+            self.poutput("Delete word failed")
+            self.output_handler.print_bold_red(response['message'])
+
+    newteam_parser = argparse.ArgumentParser()
+    newteam_parser.add_argument('team_name', type=str, help='newteam [team_name]')
+
+    @with_argparser(newteam_parser)
+    def do_newteam(self, arg):
+        """
+        Create a new team.
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        team_name = arg.team_name
+        response = self.request_handler.new_team(team_name)
+        if response['status'] == 200:
+            self.poutput("Create new team success")
+        else:
+            self.poutput("Create new team failed")
+            self.output_handler.print_bold_red(response['message'])
+
+
+    leaveteam_parser = argparse.ArgumentParser()
+    leaveteam_parser.add_argument('team_uuid', type=str, help='leaveteam [team_uuid]')
+
+    @with_argparser(leaveteam_parser)
+    def do_leaveteam(self, arg):
+        """
+        leave team
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            print("You need to be logged in to access settings")
+            return
+        # fetch the plan from arg
+        team_uuid = arg.team_uuid
+        response = self.request_handler.leave_team(team_uuid)
+        if response['status'] == 200:
+            self.poutput("Leave team success")
+        else:
+            self.poutput("Leave team failed")
+            self.output_handler.print_bold_red(response['message'])
+
+
+    nextword_parser = argparse.ArgumentParser()
+
+    @with_argparser(nextword_parser)
+    def do_nextword(self, arg):
+        """
+        leave team
+        :param arg:
+        :return:
+        """
+        if not self.logged_in:
+            self.output_handler.print_bold_red("Not Logged In")
+            return
+        self.fetch_next_word()
+
+    updateword_parser = argparse.ArgumentParser()
+    updateword_parser.add_argument('result', type=str, help='update_word [remember | forget]')
+
+    @with_argparser(updateword_parser)
+    def do_updateword(self, res):
+        """
+        update word
+        :return:
+        """
+        response = self.request_handler.update_word(self.current_word, res.result, )
+        if response['status'] == 200:
+            self.poutput("Update word success")
+        else:
+            self.poutput("Update word failed")
+            self.output_handler.print_bold_red(response['message'])
+
+    def fetch_next_word(self):
+        """
+        fetch next word from endpoint
+        :return:
+        """
+        response = self.request_handler.next_word()
+        if response['status'] == 200:
+            self.current_word = response['word']
+            self.output_handler.print_word(response)
+        elif response['status'] == 404:
+            self.output_handler.print_bold_red(response['message'])
 
 
 if __name__ == '__main__':

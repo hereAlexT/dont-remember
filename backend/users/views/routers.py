@@ -57,7 +57,7 @@ def signup():
 
     if user:
         logging.debug("User already exists")
-        return jsonify({"status": 409, "message": "User already exists"}), 409
+        return jsonify({"status": 409, "message": "User already exists."}), 409
 
     hashed_password = generate_password_hash(password)
     new_user = User(uuid=uuid.uuid4(), username=username, password=hashed_password)
@@ -189,6 +189,12 @@ def new_team():
         name = data.get('name')
         plan = data.get('plan')
 
+        # if the user alraedy has a team, return error
+        user_id = get_jwt_identity()
+        team_member = TeamMember.query.filter_by(user_uuid=user_id).first()
+        if team_member:
+            return jsonify({"status": 400, "message": "You already have a team"}), 400
+
         # add a new entry in team_info
         # {uuid, name, plan}
         _uuid = uuid.uuid4()
@@ -226,6 +232,11 @@ def add_me_to_team():
         user_id = get_jwt_identity()
         data = request.get_json()
         team_uuid = data.get('team_uuid')
+
+        # if the users are already in a team, return error
+        _team_member = TeamMember.query.filter_by(user_uuid=user_id).first()
+        if _team_member:
+            return jsonify({"status": 400, "message": "You are already in a team"}), 400
 
         # add a new entry in team_memember
         # {uuid, team_uuid, user_uuid}
