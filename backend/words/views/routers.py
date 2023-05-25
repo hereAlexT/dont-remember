@@ -152,6 +152,37 @@ def update_word():
     return jsonify({"status": 200, "message": "Word updated successfully"}), 200
 
 
+@words_blueprint.route('/delete_word', methods=['POST'])
+@jwt_required()
+def delete_word():
+    """
+    payload: {
+        "word": word
+    }
+    :return: 200 if successfully deleted, 404 if word not found
+    """
+
+    user_id = get_jwt_identity()
+    data = request.get_json()
+    word = data.get('word')
+
+    # check the existence of the user in the database
+    user = User.query.filter_by(uuid=user_id).first()
+    if not user:
+        return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
+
+    # check if the word is in the user's word list
+    word_list = WordList.query.filter_by(user_uuid=user_id, word=word).first()
+    if not word_list:
+        return jsonify({"status": 404, "message": "Word not found"}), 404
+
+    # delete the word from the word_list
+    db.session.delete(word_list)
+    db.session.commit()
+    return jsonify({"status": 200, "message": "Word deleted successfully"}), 200
+
+
+
 @words_blueprint.route('/word_history', methods=['GET'])
 @jwt_required()
 def word_history():
