@@ -98,7 +98,7 @@ def login():
         return jsonify({"status": 404, "message": "User not found"}), 404
 
     if authenticate_password(user, password):
-        expires = datetime.timedelta(hours=1)
+        expires = datetime.timedelta(minutes=10)
         # token = create_access_token(identity=username, expires_delta=expires)
         # create a token with identity = user's uuid
         token = create_access_token(identity=user.uuid, expires_delta=expires)

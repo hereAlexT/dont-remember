@@ -1,6 +1,7 @@
-from base import user_endpoint, word_endpoint
+from base import user_endpoint, word_endpoint, token_expiration
 import pytest
 import requests
+import time
 
 @pytest.fixture(scope='session', autouse=True)
 def api_token():
@@ -123,5 +124,31 @@ def test_word_history_without_token():
     # Check if the request returned a 401 status code (Unauthorized)
     assert response.status_code == 401, "API request without token did not return status code 401"
 
-#def test_token_expiration
+def test_token_expiration(api_token):
+    time.sleep(token_expiration)
+    headers = {
+        'Authorization': f'Bearer {api_token}'
+    }
+    word = {
+        'word': 'ahorse'
+    }
+    response = requests.post(word_endpoint + '/add_new_word' , headers=headers, json=word)
+    assert response.status_code == 401, "API request without token did not return status code 401"
+
+    response = requests.get(word_endpoint + '/next_word' , headers=headers)
+    assert response.status_code == 401, "API request without token did not return status code 401"
+
+    update = {
+        'word': 'ahorse',
+        'result': 'forget'
+    }
+    response = requests.post(word_endpoint + '/update_word', headers=headers, json=update)
+    assert response.status_code == 401, "API request without token did not return status code 401"
+
+    response = requests.get(word_endpoint + '/word_history', headers=headers, json=update)
+    assert response.status_code == 401, "API request without token did not return status code 401"
+
+
+
+
     
