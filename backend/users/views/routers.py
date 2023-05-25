@@ -10,6 +10,7 @@ from models.team_member import TeamMember
 from werkzeug.security import check_password_hash, generate_password_hash
 import uuid
 from models import db
+import traceback
 
 users_blueprint = Blueprint("users", __name__)
 
@@ -163,7 +164,8 @@ def new_team():
 
         # add a new entry in team_info
         # {uuid, name, plan}
-        _new_team = TeamInfo(uuid=uuid.uuid4(), name=name, plan=plan)
+        _uuid = uuid.uuid4()
+        _new_team = TeamInfo(uuid=_uuid, name=name, plan=plan)
         db.session.add(_new_team)
         db.session.commit()
 
@@ -174,8 +176,11 @@ def new_team():
         db.session.add(_new_team_member)
         db.session.commit()
 
-        return jsonify({"status": 200, "message": "Success"}), 200
+        return jsonify({"status": 200,
+                        "message": "Success",
+                        "team_uuid": str(_uuid)}), 200
     except Exception as e:
+        traceback.print_exc()
         logging.debug("Error: {}".format(e))
         return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400
 
@@ -239,14 +244,14 @@ def update_team():
     :payload:
     {
         "team_uuid": [UUID],
-        "study_plan": [plan,int]
+        "plan": [plan,int]
     }
     :return:
     """
     try:
         user_id = get_jwt_identity()
         data = request.get_json()
-        study_plan = data.get('study_plan')
+        study_plan = data.get('plan')
         team_uuid = data.get('team_uuid')
 
         # update the entry in team_info
@@ -261,6 +266,7 @@ def update_team():
 
 
 @users_blueprint.route("/team_info", methods=["GET"])
+@jwt_required()
 def team_info():
     """
     :return:
@@ -279,4 +285,27 @@ def team_info():
             }
     }
     """
-    return 200
+    try:
+        # get my current_team from team_member
+        user_id = get_jwt_identity()
+        _team_member = TeamMember.query.filter_by(user_uuid=user_id).first()
+
+        team_uuid = _team_member.team_uuid
+
+        # get team_name from team_info
+        _team_info = TeamInfo.query.filter_by(uuid=team_uuid).first()
+        team_name = _team_info.name
+        team_plan = _team_info.plan
+
+        # todo: get all team member progress
+        output_data = {
+            "status": 200,
+            "team_name": team_name,
+            "team_uuid": team_uuid,
+            "plan": team_plan,
+            "team_member": []
+        }
+        return jsonify(output_data), 200
+    except Exception as e:
+        logging.debug("Error: {}".format(e))
+        return jsonify({"status": 400, "message": "Error: {}".format(e)}), 400

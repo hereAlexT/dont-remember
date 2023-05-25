@@ -5,7 +5,7 @@ class TeamMember(db.Model):
     __tablename__ = "team_member"
     uuid = db.Column(db.Integer, primary_key=True)
     team_uuid = db.Column(db.Integer, db.ForeignKey("team_info.uuid"), nullable=False)
-    user_uuid = db.Column(db.Integer, db.ForeignKey("user.uuid"), nullable=False)
+    user_uuid = db.Column(db.Integer, db.ForeignKey("users.uuid"), nullable=False)
 
     def to_dict(self):
         return {
