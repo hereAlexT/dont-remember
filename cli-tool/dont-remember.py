@@ -138,50 +138,203 @@ Definition: {list(word_dict.values())[0]}"""
         return ansi.style(text, italic=True)
 
 
+
 class RequestHandler:
+
+    def __init__(self, user_endpoint=USER_ENDPOINT, word_endpoint=WORD_ENDPOINT):
+        self.token = None
+        self.user_url = user_endpoint
+        self.word_url = word_endpoint
+        self.header = {}
+
+    def get_header(self, token):
+        if token is None:
+            token = self.token
+        return {
+            "Authorization": f"Bearer {self.token}"
+        }
+
     @staticmethod
-    def request_login(username, password):
+    def check_users_connection():
         """
-        :param username:
-        :param password:
+        check user and word service /health endpoint
         :return:
         """
-        # response = requests.get('https://api.example.com/check_login',
-        #                         params={'username': username, 'password': password})
-        # data = response.json()
-        # return data
-        if username == "admin" and password == "admin":
+        response = requests.get(USER_ENDPOINT + '/health')
+        if response.status_code == 200:
             return True
         else:
             return False
 
     @staticmethod
-    def request_signup(username, password):
+    def check_words_connection():
         """
-        :param username:
-        :param password:
+        check user and word service /health endpoint
         :return:
         """
-        # response = requests.get('https://api.example.com/check_login',
-        #                         params={'username': username, 'password': password})
-        # data = response.json()
-        # return data
-        if username != "admin":
+        response = requests.get(WORD_ENDPOINT + '/health')
+        if response.status_code == 200:
             return True
         else:
             return False
 
     @staticmethod
-    def request_team():
+    def signup(username, password):
         """
         :param username:
         :param password:
         :return:
         """
-        response = requests.get('https://api.example.com/check_login',
-                                params={'username': username, 'password': password})
-        data = response.json()
-        return data
+        response = requests.post(USER_ENDPOINT + '/signup', json={
+            "username": username,
+            "password": password
+        })
+        return response.json()
+
+    def login(self, username, password):
+        """
+        endpoint user /login
+        :param username:
+        :param password:
+        :return:
+        """
+        response = requests.post(USER_ENDPOINT + '/login', json={
+            "username": username,
+            "password": password
+        })
+        # if response.status_code == 200, assign token
+        if response.status_code == 200:
+            self.token = response.json()['token']
+            self.header = self.get_header(self.token)
+        return response.json()
+
+    def new_team(self, name: str, plan: int):
+        """
+        visit endpoint user /new_team
+        :param plan:
+        :param name:
+        :return:
+        """
+        payload = {
+            "name": name,
+            "plan": plan
+        }
+        response = requests.post(USER_ENDPOINT + '/new_team', json=payload, headers=self.header)
+        return response.json()
+
+    def add_me_to_team(self, team_uuid):
+        """
+        visit endpoint user /add_me_to_team
+        :param team_uuid:
+        :return:
+        """
+        payload = {
+            "team_uuid": team_uuid
+        }
+        response = requests.post(USER_ENDPOINT + '/add_me_to_team', json=payload, headers=self.header)
+        return response.json()
+
+    def leave_team(self, team_uuid):
+        """
+        visist user /leave team
+        :param team_uuid:
+        :return:
+        """
+        payload = {
+            "team_uuid": team_uuid
+        }
+
+        response = requests.post(USER_ENDPOINT + '/leave_team', json=payload, headers=self.header)
+        return response.json()
+
+    def update_team(self, team_uuid, plan):
+        """
+        visit user /update_team
+        :param plan:
+        :param team_uuid:
+        :return:
+        """
+        payload = {
+            "team_uuid": team_uuid,
+        }
+
+        response = requests.post(USER_ENDPOINT + '/update_team', json=payload, headers=self.header)
+        return response.json()
+
+    def team_info(self):
+        """
+        visit user /team_info
+        :param token:
+        :return:
+        """
+        response = requests.get(USER_ENDPOINT + '/team_info', headers=self.header)
+        return response.json()
+
+    def personal_progress(self):
+        """
+        visit user /personal_progress
+        :param token:
+        :return:
+        """
+        response = requests.get(USER_ENDPOINT + '/personal_progress', headers=self.header)
+        return response.json()
+
+    def add_new_word(self, word):
+        """
+        endpoint word /add_new_word
+        :param word:
+        :return:
+        """
+        payload = {
+            "word": word
+        }
+        response = requests.post(WORD_ENDPOINT + '/add_new_word', json=payload, headers=self.header)
+        return response.json()
+
+    def next_word(self):
+        """
+        visit endpoint user next_word
+        :param token:
+        :return:
+        """
+
+        response = requests.get(WORD_ENDPOINT + '/next_word', headers=self.header)
+        return response.json()
+
+    def update_word(self, word, result):
+        """
+        update word endpoint: word /update word
+        method PUT
+        :return:
+        """
+        payload = {
+            "word": word,
+            "result": result
+        }
+        response = requests.put(WORD_ENDPOINT + '/update_word', json=payload, headers=self.header)
+        return response.json()
+
+    def delete_word(self, word):
+        """
+        delete world endpoint: word /delete_word
+        method POST
+        :param word:
+        :return:
+        """
+        payload = {
+            "word": word
+        }
+        response = requests.post(WORD_ENDPOINT + '/delete_word', json=payload, headers=self.header)
+        return response.json()
+
+    def word_history(self):
+        """
+        visit endpoint word /word_history
+        :return:
+        """
+        response = requests.get(WORD_ENDPOINT + '/word_history', headers=self.header)
+        return response.json()
+
 
 
 class AppShell(Cmd):
