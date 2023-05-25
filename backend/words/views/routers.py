@@ -108,7 +108,7 @@ def next_word():
 def update_word():
     """
     {
-        "word_list_uuid": [uuid],
+        "word: word,
         "result": ["Remember" | "Forget"]
     }
     :return:
@@ -164,7 +164,24 @@ def word_history():
     if not word_list:
         return jsonify({"status": 404, "message": "Word not found"}), 404
 
+    """
+    if for mat is like {
+        "status": 200,
+        "history": [ {
+        uuid:uuid,
+        word: word,
+        last_review_time: last_review_time,
+        next_review_time: next_review_time,}, ...]
+    """
+    history = []
+    for word in word_list:
+        history.append({
+            "uuid": word.uuid,
+            "word": word.word,
+            "last_review_time": word.last_review_time,
+            "next_review_time": word.next_review_time,
+        })
     return jsonify({
         "status": 200,
-        "word_list": [word.word for word in word_list],
+        "history": history,
     }), 200
