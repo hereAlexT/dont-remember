@@ -42,7 +42,7 @@ def create_app(_config_overrides=None):
         db.session.commit()
 
     # Register the blueprint
-    _app.register_blueprint(users_blueprint, url_prefix='/api/v1')
+    _app.register_blueprint(users_blueprint, url_prefix='/api/v1/users')
     return _app
 
 

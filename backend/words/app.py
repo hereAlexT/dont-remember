@@ -41,7 +41,7 @@ def create_app(_config_overrides=None):
         db.session.commit()
 
     # Register the blueprint
-    _app.register_blueprint(words_blueprint, url_prefix='/api/v1')
+    _app.register_blueprint(words_blueprint, url_prefix='/api/v1/words')
     return _app
 
 
