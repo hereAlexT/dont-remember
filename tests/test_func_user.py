@@ -384,3 +384,58 @@ class TestUser(unittest.TestCase):
                    "status"] == 200, f"User personal_progress failed with status code {response.status_code}"
         assert response.json()[
                    "studied_today"] == 4, f"User personal_progress failed with status code {response.status_code}"
+
+    def test_team_info(self):
+        """
+        1. create a user as user_1 and login with token_1
+        2. create team
+        3. create another user as user_2 and login with token_2
+        4. add user_2 to team
+        5. learn 2 words by user_2
+        6. check team info by user_1
+        :return:
+        """
+        # create user_1
+        username_1, password_1 = TestUser.create_user()
+        token_1 = TestUser.login(username_1, password_1)
+        # create user_2
+        username_2, password_2 = TestUser.create_user()
+        token_2 = TestUser.login(username_2, password_2)
+
+        # create team by user_1
+        headers_1 = {
+            "Authorization": f"Bearer {token_1}"
+        }
+        data = {
+            "name": self.generate_random_string(10),
+            "plan": 10
+        }
+        response = requests.post(user_endpoint + '/new_team', headers=headers_1, json=data)
+        assert response.status_code == 200, f"User new_team failed with status code {response.status_code}"
+        # get the team uuid from response
+        team_uuid = response.json()["team_uuid"]
+
+        # add user_2 to team
+        headers_2 = {
+            "Authorization": f"Bearer {token_2}"
+        }
+        data = {
+            "team_uuid": team_uuid
+        }
+        response = requests.post(user_endpoint + '/add_me_to_team', headers=headers_2, json=data)
+        print(response)
+        assert response.status_code == 200, f"User join_team failed with status code {response.status_code}"
+
+        # add 10 words to user_2
+        _words = ["hello", "world", "good", "job", "excellent", "nice", "reference", "model", "algorithm", "happy"]
+        for w in _words:
+            TestUser.add_new_word(token_2, w)
+
+        # learn 2 words by user_2
+        for i in range(2):
+            word = TestUser.next_word(token_2)
+            TestUser.update_word(token_2, word, "remember")
+
+        # get team_info
+        response = requests.get(user_endpoint + '/team_info', headers=headers_1)
+        print(response.json())

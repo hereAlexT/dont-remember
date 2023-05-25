@@ -114,8 +114,8 @@ class TestWord(unittest.TestCase):
         headers = {
             "Authorization": f"Bearer {token}"
         }
-        response = requests.post(word_endpoint + '/update_word', json=payload, headers=headers)
-        print(response.json())
+        response = requests.put(word_endpoint + '/update_word', json=payload, headers=headers)
+        print(response)
         assert response.status_code == 200, f"Update word failed with status code {response.status_code}"
 
     def test_word_history(self):
@@ -163,3 +163,41 @@ class TestWord(unittest.TestCase):
         print(response.json())
         assert response.status_code == 200, f"Get next word failed with status code {response.status_code}"
         assert response.json()['word'] == word, f"Get next word failed with status code {response.status_code}"
+
+    def test_delete_word(self):
+        """
+        1. create signup / login
+        2. add 1 word
+        3. check history
+        4. delete the word
+        5. check history
+        :return:
+        """
+        # signup and login
+        username, password = TestWord.create_user()
+        token = TestWord.login(username, password)
+        # add 1 word
+        TestWord.add_new_word(token, "word")
+        word = "hello"
+        TestWord.add_new_word(token, word)
+
+        # check history
+        headers = {
+            "Authorization": f"Bearer {token}"
+        }
+        response = requests.get(word_endpoint + '/word_history', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"Get word history failed with status code {response.status_code}"
+        assert len(response.json()['history']) == 2, f"Get word history failed with status code {response.status_code}"
+        # delete the word
+        payload = {
+            "word": word
+        }
+        response = requests.post(word_endpoint + '/delete_word', json=payload, headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"Delete word failed with status code {response.status_code}"
+        # check history
+        response = requests.get(word_endpoint + '/word_history', headers=headers)
+        print(response.json())
+        assert response.status_code == 200, f"Get word history failed with status code {response.status_code}"
+        assert len(response.json()['history']) == 1, f"Get word history failed with status code {response.status_code}"
