@@ -201,3 +201,6 @@ class TestWord(unittest.TestCase):
         print(response.json())
         assert response.status_code == 200, f"Get word history failed with status code {response.status_code}"
         assert len(response.json()['history']) == 1, f"Get word history failed with status code {response.status_code}"
+
+
+

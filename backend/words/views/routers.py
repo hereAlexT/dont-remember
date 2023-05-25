@@ -98,14 +98,28 @@ def next_word():
         if not word:
             return jsonify({"status": 404, "message": "Word not found"}), 404
 
-        return jsonify({
+        # find all the entries of the word
+        word_list = DicWord.query.filter_by(word=word.word).all()
+
+        response_data = {
             "status": 200,
             "word": word.word,
             "next_review_time": word.next_review_time,
-        }), 200
+            "meanings": []
+        }
+
+        for i in word_list:
+            response_data["meanings"].append({
+                "definition": i.definition,
+                "speech_part": i.speech_part,
+                "language_a": i.language_a,
+                "language_b": i.language_b
+            })
+        return jsonify(response_data), 200
+
     except Exception as e:
         current_app.logger.error(f"next_word failed: {e}")
-        return jsonify({"error": e}), 500
+        return jsonify({"error": str(e)}), 500
 
 
 @words_blueprint.route('/update_word', methods=['PUT'])
