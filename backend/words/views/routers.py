@@ -67,7 +67,7 @@ def add_new_word():
         word=word,
         user_uuid=user_id,
         last_review_time=get_curr_timestamp(),
-        next_review_time=get_curr_timestamp() + timedelta(hours=24)
+        next_review_time=get_curr_timestamp() + timedelta(minutes=1)
     )
     db.session.add(new_word)
     db.session.commit()
@@ -75,6 +75,7 @@ def add_new_word():
 
 
 @words_blueprint.route('/next_word', methods=['GET'])
+@jwt_required()
 def next_word():
     """
     Always return the word in the word_list of curr_user with the smallest next_review_time
@@ -84,38 +85,43 @@ def next_word():
             "next_review_time": next_review_time,
             }
     """
-    user_id = get_jwt_identity()
+    try:
+        user_id = get_jwt_identity()
 
-    # check the existence of the user in the database
-    user = User.query.filter_by(uuid=user_id).first()
-    if not user:
-        return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
+        # check the existence of the user in the database
+        user = User.query.filter_by(uuid=user_id).first()
+        if not user:
+            return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
 
-    # find the word in word_list with the smallest next_review_time
-    word = WordList.query.filter_by(user_uuid=user_id).order_by(WordList.next_review_time).first()
-    if not word:
-        return jsonify({"status": 404, "message": "Word not found"}), 404
+        # find the word in word_list with the smallest next_review_time
+        word = WordList.query.filter_by(user_uuid=user_id).order_by(WordList.next_review_time).first()
+        if not word:
+            return jsonify({"status": 404, "message": "Word not found"}), 404
 
-    return jsonify({
-        "status": 200,
-        "word": word.word,
-        "next_review_time": word.next_review_time,
-    }), 200
+        return jsonify({
+            "status": 200,
+            "word": word.word,
+            "next_review_time": word.next_review_time,
+        }), 200
+    except Exception as e:
+        current_app.logger.error(f"next_word failed: {e}")
+        return jsonify({"error": e}), 500
 
 
 @words_blueprint.route('/update_word', methods=['POST'])
 @jwt_required()
 def update_word():
     """
+    update word status for the user. this is not where to update word such as spelling
     {
-        "word: word,
-        "result": ["Remember" | "Forget"]
+        "word": word,
+        "result": ["remember" | "forget"]
     }
     :return:
     """
     user_id = get_jwt_identity()
     data = request.get_json()
-    word_list_uuid = data.get('word_list_uuid')
+    word = data.get('word')
     result = data.get('result')
 
     # check the existence of the user in the database
@@ -123,8 +129,8 @@ def update_word():
     if not user:
         return jsonify({"status": 401, "message": "Invalid Token: User not found"}), 401
 
-    # check if the word_list_uuid is in the user's word list
-    word_list = WordList.query.filter_by(user_uuid=user_id, uuid=word_list_uuid).first()
+    # check if the word is in the user's word list
+    word_list = WordList.query.filter_by(user_uuid=user_id, word=word).first()
     if not word_list:
         return jsonify({"status": 404, "message": "Word not found"}), 404
 
