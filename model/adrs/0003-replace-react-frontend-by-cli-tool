@@ -1,0 +1,34 @@
+# 1. Independent Business Logic
+
+Date: 2023-04-28
+
+## Status
+
+Accepted
+
+## Summary
+We assume that our product is toB, because the toC is to competitive in this niche market.
+Since many companies want to integrate external tools into their existing system, we only need to provide a suite of APIs
+After discussing with our course lecturer, instead of developing a frontend, we develop a CLI tool for demonstration purposes.
+
+## Context
+
+- Our team has no experience in frontend development, especially with React.
+- A demo tool is necessary to show the business logic of our software.
+
+
+## Decision
+
+- Replace the React frontend with a CLI tool.
+
+## Consequences
+
+Advantages:
+
+- The team has experiences in CLI development.
+- Development costs are lower as the CLI doesn't require cloud deployment.
+
+## Disadvantages
+
+- The use of CLI tool is not as intuitive as the React frontend.
+- For the user experience, the CLI tool doesn't perform as well as the React frontend.
