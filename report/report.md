@@ -68,7 +68,7 @@ Lastly, the _Other Tools_ system interfaces with the Don't Remember system throu
 streamlined interaction is established, further facilitating user engagement.
 
 ### Don't Remember Software System
-<img src="../model/dont-remember-software-system-architecture.pngg" width="600">
+<img src="../model/dont-remember-software-system-architecture.png" width="600">
 Our software system provides a CLI tool for demonstration purposes. User requests can originate from this CLI tool or
 other tools. Initially, these requests reach the Amazon Elastic Load Balancers. Subsequently, these requests are
 redirected to the auto-scaling group that hosts two microservices: the Users Microservice and the Words Microservice.
