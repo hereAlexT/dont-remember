@@ -110,6 +110,14 @@ A Python-based CLI tool is available for demonstration purposes. It encompasses 
 the scope.
 
 ## Trade-Offs
+### Tokens
+Initially, we introduced tokens for security purposes. Each user is assigned a token with a set expiration time upon login. Below, we outline three different strategies for token verification:
+
+The first strategy involves storing tokens in Redis. This approach is advantageous due to its speed and the benefit of having a separate service, simplifying maintenance. However, for a minimum viable product (MVP), this strategy is likely too costly in terms of development.
+
+Consequently, the second strategy is to store tokens in a PostgreSQL database. Compared to Redis, this is a more cost-effective solution, and its speed suffices for the MVP. Nonetheless, it does present a potential security risk in the event of a database leak.
+
+The final strategy utilizes JSON Web Tokens (JWT) to automatically generate tokens. These tokens don't require storage and are encapsulated in the HTTP request headers. This approach is not only more secure but also less development-intensive than the previous two methods. However, it comes with a functional drawback: it does not support server-side logout.
 
 ## Critique
 
