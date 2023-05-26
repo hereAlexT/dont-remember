@@ -53,7 +53,7 @@ The MVP should be able to:
 The architecure is a Service-based Architecture
 
 ### System Landscape
-![System Landscape](../model/dont-remember-system-landscape-architecture.png){: style="width: 50%; height: auto;"}
+![System Landscape](../model/dont-remember-system-landscape-architecture.png | width=400)
 In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't
 Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB)
 project, the _user_ role primarily symbolizes staff members.
@@ -68,7 +68,7 @@ Lastly, the _Other Tools_ system interfaces with the Don't Remember system throu
 streamlined interaction is established, further facilitating user engagement.
 
 ### Don't Remember Software System
-![Don't Remember Software System](../model/dont-remember-software-system-architecture.png){: style="width: 50%; height: auto;"}
+![Don't Remember Software System](../model/dont-remember-software-system-architecture.png  | width=400)
 Our software system provides a CLI tool for demonstration purposes. User requests can originate from this CLI tool or
 other tools. Initially, these requests reach the Amazon Elastic Load Balancers. Subsequently, these requests are
 redirected to the auto-scaling group that hosts two microservices: the Users Microservice and the Words Microservice.
