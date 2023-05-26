@@ -56,6 +56,7 @@ The _Other Tools_ software system embodies a suite of compliant and personalized
 Lastly, the _Other Tools_ system interfaces with the Don't Remember system through a set of dedicated APIs. As such, a streamlined interaction is established, further facilitating user engagement.
 
 ## Trade-Offs
+### Token
 
 ## Critique
 
