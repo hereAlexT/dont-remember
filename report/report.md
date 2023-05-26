@@ -6,7 +6,14 @@
 
 ## Proposal Clarification
 
-[ ] Study plan in proposal and here
+- This section is used to explain some of the unclear content described in the proposal.
+- In the [proposal scope](https://csse6400.github.io/project-proposal-2023/s4786694/proposal.html#scope), it says
+  _User preference, including change the level of English study._ In here, The _change the level of English study_ means
+  two functions: 1. Users should know the study progress of each day. 2. The system should automatically choose the word
+  that user need to learn each day.
+- In the [proposal scope](https://csse6400.github.io/project-proposal-2023/s4786694/proposal.html#scope), it says
+  _dynamically change the studying plan_. It means the same as the _change the level of English study_ in the proposal.       which is that the system should automatically choose the word that user need to learn each day.
+- In the following sections, we will use _study plan_ or _plan_ to indicate the number of words a user set to learn each       day.
 
 ## Changes
 
