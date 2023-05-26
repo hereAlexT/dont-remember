@@ -42,10 +42,9 @@ This suits the current development team's experience and is a common environment
 Advantages
 - After the user caches the dictionary, it can be used locally without networking
 - Reduced the servers load
-- If the users hardware is good, the responsiveness would increase
-Neutral
-- Multiple interfaces are required for different frontend applications.
-  These can be delivered through different Java libraries.
+- If the users hardware is good, the responsiveness would increaseconsumes more memory on the user's system
 
 Disadvantages
 - The development team lacks front-end development experience.
+- The front-end load was increased
+- Would consumes more memory on the user's system
