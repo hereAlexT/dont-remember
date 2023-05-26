@@ -48,7 +48,6 @@ The MVP should be able to:
 ## Architecture
 
 The architecure is a Service-based Architecture
-### System landscape
 
 ## Trade-Offs
 
