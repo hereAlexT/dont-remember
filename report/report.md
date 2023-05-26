@@ -53,6 +53,7 @@ The MVP should be able to:
 The architecure is a Service-based Architecture
 
 ### System Landscape
+
 <img src="../model/dont-remember-system-landscape-architecture.png" width="600">
 In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't
 Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB)
@@ -68,6 +69,7 @@ Lastly, the _Other Tools_ system interfaces with the Don't Remember system throu
 streamlined interaction is established, further facilitating user engagement.
 
 ### Don't Remember Software System
+
 <img src="../model/dont-remember-software-system-architecture.png" width="400">
 Our software system provides a CLI tool for demonstration purposes. User requests can originate from this CLI tool or
 other tools. Initially, these requests reach the Amazon Elastic Load Balancers. Subsequently, these requests are
@@ -110,16 +112,27 @@ A Python-based CLI tool is available for demonstration purposes. It encompasses 
 the scope.
 
 ## Trade-Offs
+
 ### Three Token Verification Strategies: Redis, PostgreSQL, and JWT
-Initially, we introduced tokens for security purposes. Each user is assigned a token with a set expiration time upon login. Below, we outline three different strategies for token verification:
 
-The first strategy involves storing tokens in Redis. This approach is advantageous due to its speed and the benefit of having a separate service, simplifying maintenance. However, for a minimum viable product (MVP), this strategy is likely too costly in terms of development.
+Initially, we introduced tokens for security purposes. Each user is assigned a token with a set expiration time upon
+login. Below, we outline three different strategies for token verification:
 
-Consequently, the second strategy is to store tokens in a PostgreSQL database. Compared to Redis, this is a more cost-effective solution, and its speed suffices for the MVP. Nonetheless, it does present a potential security risk in the event of a database leak.
+The first strategy involves storing tokens in Redis. This approach is advantageous due to its speed and the benefit of
+having a separate service, simplifying maintenance. However, for a minimum viable product (MVP), this strategy is likely
+too costly in terms of development.
 
-The final strategy utilizes JSON Web Tokens (JWT) to automatically generate tokens. These tokens don't require storage and are encapsulated in the HTTP request headers. This approach is not only more secure but also less development-intensive than the previous two methods. However, it comes with a functional drawback: it does not support server-side logout.
+Consequently, the second strategy is to store tokens in a PostgreSQL database. Compared to Redis, this is a more
+cost-effective solution, and its speed suffices for the MVP. Nonetheless, it does present a potential security risk in
+the event of a database leak.
 
+The final strategy utilizes JSON Web Tokens (JWT) to automatically generate tokens. These tokens don't require storage
+and are encapsulated in the HTTP request headers. This approach is not only more secure but also less
+development-intensive than the previous two methods. However, it comes with a functional drawback: it does not support
+server-side logout.
 
+In consideration of speed, development cost, security, and functionality, we have ultimately decided to use JSON Web
+Tokens (JWT) for token generation and verification, despite its inability to support server-side logout.
 
 ## Critique
 
