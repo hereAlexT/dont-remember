@@ -178,7 +178,7 @@ Should Team and User function be seperated into two microservices?
 The following screenshots shows the functionality test of the system, the test result is conducted on the deployed
 environment on AWS.
 <img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
-<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word">
+<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
 From the test results, we can see that all the functionalities are working as expected.
 
 ### Security Tests
