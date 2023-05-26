@@ -240,7 +240,7 @@ First the suite tests whether the token is able to be used to use the functional
 
 #### Results
 <br>
-<img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
+<img src="./images/test_security.png" width="400" alt="Test Result of test_func_user">
 
 ### Functionality Tests
 
