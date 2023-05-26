@@ -111,8 +111,6 @@ the scope.
 
 ## Trade-Offs
 
-### Token
-
 ## Critique
 
 ## Evaluation
