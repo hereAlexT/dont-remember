@@ -35,6 +35,7 @@ This provides clear separation of concerns and ensures consistency of logic acro
 The front-end logic will be implemented in React.
 The back-end logic will be imeplemented in Python.
 The project will be deployed on AWS。
+The data would store in PostgreSQL on AWS.
 This suits the current development team's experience and is a common environment.
 
 ## Consequences
