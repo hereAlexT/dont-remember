@@ -34,7 +34,8 @@ This provides clear separation of concerns and ensures consistency of business l
 It means the business logic only needs to be implemented once.
 This follows good design practices and common user interface design patterns.
 
-The business logic will be implemented in Java.
+The front-end logic will be implemented in React.
+The back-end logic will be imeplemented in Python.
 This suits the current development team's experience and is a common environment.
 Java has good performance characteristices.
 Java has good support for interacting with databases, to deliver the data storage and transaction processing requirements.
