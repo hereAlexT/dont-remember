@@ -85,7 +85,11 @@ The load balancers use two rules to manage traffic:
 
 #### Services
 
-The Users Microservice and Words Microservice are hosted on AWS ECS, with auto-scaling policies in place.
+The Users Microservice and Words Microservice are hosted on AWS ECS, with auto-scaling policies in place. Each Service
+is using Flask as the web framework, gunicorn as the WSGI server. And each service is stateless, all the stateful data
+is
+stored in the database.
+
 The Users Microservice handles user and team-related requests, specifically:
 
 - Add/Delete word they want to learn
@@ -110,6 +114,33 @@ word records, learning history, team information, and team members and so on.
 
 A Python-based CLI tool is available for demonstration purposes. It encompasses all the functionalities mentioned within
 the scope.
+
+### How does it achieve Quality Attributes?
+
+#### Reliability
+
+Our architectural design is fault-tolerant, for the reason that firstly, we use AWS ECS to host our services, which
+provides auto-scaling policies, when requests increases, the ECS will scale up to make sure the system caused no time
+out fault. Secondly, there is a health endpoint in each service, the load balancer will check the health of each
+service,
+if one service is down, the load balancer will redirect or start a new service.
+
+#### Availability
+
+- An auto-scaling policies are in place to ensure the availability of the system. When the number of requests increases,
+  the ECS will scale out to make sure the system is always available.
+- Similar to Reliability, there is a health endpoint in each service, the load balancer will check the health of each
+  one, if fails, new service will be started.
+
+### Maintainability
+
+Terraform is used to manage the infrastructure, which makes it easy to maintain and update. ECS is used, when update, we
+only need to update the docker image, and the ECS will automatically update the service.
+
+#### Scalability
+
+- AWS ECS is used with auto-scaling policies.
+- Microservices architecture is used, when requests to one microservice are increased, it can be scaled easily.
 
 ## Trade-Offs
 
