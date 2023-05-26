@@ -23,7 +23,7 @@ Date: 2023-4-19
     - Progress based on both a user's history and behaviour.
     - Recording all users' word history.
     - Team fuction.
-- Development team has experience using Java.
+- Development team has experience using Python.
 
 ## Decision
 
@@ -50,4 +50,4 @@ Neutral
   These can be delivered through different Java libraries.
 
 Disadvantages
-- Additional complexity for the overall architecture of the system.
+- The development team lacks front-end development experience.
