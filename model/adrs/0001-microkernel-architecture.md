@@ -21,8 +21,8 @@ Date: 2023-4-19
     - The back-end only needs to be responsible for executing the instructions transmitted by the front-end and connecting to the database, and then sending back data such as dictionary definitions
 - Delivering functional requirements requires complex processing and database transactions.
     - Progress based on both a user's history and behaviour.
-    - Recording all customer interactions in the application.
-- Sales department wants customers to be able to change between using mobile and web applications without interrupting their sales experience.
+    - Recording all users' word history.
+    - Team fuction.
 - Development team has experience using Java.
 
 ## Decision
