@@ -54,7 +54,7 @@ The architecure is a Service-based Architecture
 
 ### System Landscape
 
-<img src="../model/dont-remember-system-landscape-architecture.png" width="600">
+<img src="../model/dont-remember-system-landscape-architecture.png" width="600" alt="System Landscape">
 In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't
 Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB)
 project, the _user_ role primarily symbolizes staff members.
@@ -70,7 +70,7 @@ streamlined interaction is established, further facilitating user engagement.
 
 ### Don't Remember Software System
 
-<img src="../model/dont-remember-software-system-architecture.png" width="400">
+<img src="../model/dont-remember-software-system-architecture.png" width="400" alt="Software System Architecture">
 Our software system provides a CLI tool for demonstration purposes. User requests can originate from this CLI tool or
 other tools. Initially, these requests reach the Amazon Elastic Load Balancers. Subsequently, these requests are
 redirected to the auto-scaling group that hosts two microservices: the Users Microservice and the Words Microservice.
@@ -172,6 +172,14 @@ Should Team and User function be seperated into two microservices?
 ## Critique
 
 ## Evaluation
+
+### Functionality
+
+The following screenshots shows the functionality test of the system, the test result is conducted on the deployed
+environment on AWS.
+<img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
+<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word">
+From the test results, we can see that all the functionalities are working as expected.
 
 ### Security Tests
 
