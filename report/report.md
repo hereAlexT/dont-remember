@@ -133,12 +133,20 @@ server-side logout.
 
 In consideration of speed, development cost, security, and functionality, we have ultimately decided to use JSON Web
 Tokens (JWT) for token generation and verification, despite its inability to support server-side logout.
+
 ### Choosing the Optimal Database Strategy for MVP Development
+
 In terms of database design, we considered two different strategies.
 
-The first strategy involved using a hybrid approach: storing the user table in PostgreSQL, and the wordslist and Dictionary tables in Amazon DocumentDB. Owing to its NoSQL nature, Amazon DocumentDB provides stable, low-latency read and write performance, which is superior compared to relational databases like PostgreSQL. However, this approach poses significant challenges for our MVP development: the cost of utilizing Amazon DocumentDB is high, and the execution of joint queries with User data stored in PostgreSQL can be complicated.
+The first strategy involved using a hybrid approach: storing the user table in PostgreSQL, and the wordslist and
+Dictionary tables in Amazon DocumentDB. Owing to its NoSQL nature, Amazon DocumentDB provides stable, low-latency read
+and write performance, which is superior compared to relational databases like PostgreSQL. However, this approach poses
+significant challenges for our MVP development: the cost of utilizing Amazon DocumentDB is high, and the execution of
+joint queries with User data stored in PostgreSQL can be complicated.
 
-The alternative strategy was to store all tables in PostgreSQL. This option offers a more cost-effective solution that aligns well with the budget constraints of our MVP development. Given these considerations, we've decided to adopt this second strategy, consolidating all our tables within a single PostgreSQL database.
+The alternative strategy was to store all tables in PostgreSQL. This option offers a more cost-effective solution that
+aligns well with the budget constraints of our MVP development. Given these considerations, we've decided to adopt this
+second strategy, consolidating all our tables within a single PostgreSQL database.
 
 ### Deciding Between Separate or Combined Microservices for Team and User Functions
 
@@ -148,8 +156,9 @@ Should Team and User function be seperated into two microservices?
     - Pros:
         - Easy to development, each microservice only need to handle one type of request.
     - Cons:
-        - Developing two microservices will increase development costs. 
-        - Our current database has a capacity of 300 connections; separating them will establish more connections when scaling out, necessitating a database upgrade.
+        - Developing two microservices will increase development costs.
+        - Our current database has a capacity of 300 connections; separating them will establish more connections when
+          scaling out, necessitating a database upgrade.
         - Need a method a figure how to communicate between Team and User, because they are highly related.
 - Put Team and User in the Same Microservices
     - Pros:
@@ -158,7 +167,7 @@ Should Team and User function be seperated into two microservices?
         - The current database capacity of 300 connections is sufficient.
     - Cons:
         - Potential deployment waste, since requests to users are more frequent than requests to teams.
-Considered this is a MVP, we decided to put Team and User in the same microservice.
+          Considered this is a MVP, we decided to put Team and User in the same microservice.
 
 ## Critique
 
@@ -172,7 +181,21 @@ tokens can provide all information of a user, and if user's data is protected by
 
 ### Functionality Tests
 
-A suite of automated tests check if the implemented function provide the correct input.
+#### Test Plan
+
+Test every functionality of the system, which includes all the functionalities mentioned in the scope. We think up every
+possible use case and write tests to cover them. The tests are first conducted in our local development environment, and
+then they are tested after being deployed on AWS.
+
+#### Test Link
+
+- [Users Test](../tests/users_test.py)
+- [Words Test](../tests/words_test.py)
+
+#### How to Run the Code
+
+1. Change the URl of endpoints in base.py
+2. Use command `pytest`
 
 ### Availability Tests
 
