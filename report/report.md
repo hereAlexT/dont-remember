@@ -48,6 +48,12 @@ The MVP should be able to:
 ## Architecture
 
 The architecure is a Service-based Architecture
+### System Landscope
+In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB) project, the user role primarily symbolizes staff members. 
+
+The "Other Tools" software system embodies a suite of compliant and personalized software integrated within the company's server infrastructure. Staff can utilize these tools to interact with the Don't Remember software system. Alternatively, they can also use a built-in Command Line Interface (CLI) within Don't Remember to communicate with the system. However, it's worth noting that this CLI is primarily intended for demo purposes; therefore, we generally advise against its regular use.
+
+Lastly, the "Other Tools" system interfaces with the Don't Remember system through a set of dedicated APIs. As such, a streamlined interaction is established, further facilitating user engagement.
 
 ## Trade-Offs
 
