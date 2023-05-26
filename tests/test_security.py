@@ -66,7 +66,7 @@ def test_update_word(api_token):
         'word': 'ahorse',
         'result': 'forget'
     }
-    response = requests.post(api_url, headers=headers, json=payload)
+    response = requests.put(api_url, headers=headers, json=payload)
     print(api_url, response.status_code)
     # Check if the request was successful
     assert response.status_code != 401, "API request failed with status code 401 (Unauthorized)"
@@ -77,7 +77,7 @@ def test_word_history(api_token):
     headers = {
         'Authorization': f'Bearer {api_token}'
     }
-    response = requests.post(api_url, headers=headers)
+    response = requests.get(api_url, headers=headers)
     print(api_url, response.status_code)
     # Check if the request was successful
     assert response.status_code != 401, "API request failed with status code 401 (Unauthorized)"
@@ -109,7 +109,7 @@ def test_update_word_without_token():
         'word': 'ahorse',
         'result': 'forget'
     }
-    response = requests.post(api_url, json=payload)
+    response = requests.put(api_url, json=payload)
     print(api_url, response.status_code)
     
     # Check if the request returned a 401 status code (Unauthorized)
@@ -142,7 +142,7 @@ def test_token_expiration(api_token):
         'word': 'ahorse',
         'result': 'forget'
     }
-    response = requests.post(word_endpoint + '/update_word', headers=headers, json=update)
+    response = requests.put(word_endpoint + '/update_word', headers=headers, json=update)
     assert response.status_code == 401, "API request without token did not return status code 401"
 
     response = requests.get(word_endpoint + '/word_history', headers=headers, json=update)
