@@ -30,16 +30,12 @@ Date: 2023-4-19
 All logic will be implemented in front-end of the software architecture.
 Web and mobile applications will implement the interaction tier.
 Front-end communicate with the back-end to access database.
-This provides clear separation of concerns and ensures consistency of logic across front-end and back-end
-It means the business logic only needs to be implemented once.
-This follows good design practices and common user interface design patterns.
+This provides clear separation of concerns and ensures consistency of logic across front-end and back-end.
 
 The front-end logic will be implemented in React.
 The back-end logic will be imeplemented in Python.
 The project will be deployed on AWS。
 This suits the current development team's experience and is a common environment.
-Java has good performance characteristices.
-Java has good support for interacting with databases, to deliver the data storage and transaction processing requirements.
 
 ## Consequences
 
