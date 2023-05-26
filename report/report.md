@@ -133,6 +133,12 @@ server-side logout.
 
 In consideration of speed, development cost, security, and functionality, we have ultimately decided to use JSON Web
 Tokens (JWT) for token generation and verification, despite its inability to support server-side logout.
+### "Choosing the Optimal Database Strategy for MVP Development"
+In terms of database design, we considered two different strategies.
+
+The first strategy involved using a hybrid approach: storing the user table in PostgreSQL, and the wordslist and Dictionary tables in Amazon DocumentDB. Owing to its NoSQL nature, Amazon DocumentDB provides stable, low-latency read and write performance, which is superior compared to relational databases like PostgreSQL. However, this approach poses significant challenges for our MVP development: the cost of utilizing Amazon DocumentDB is high, and the execution of joint queries with User data stored in PostgreSQL can be complicated.
+
+The alternative strategy was to store all tables in PostgreSQL. This option offers a more cost-effective solution that aligns well with the budget constraints of our MVP development. Given these considerations, we've decided to adopt this second strategy, consolidating all our tables within a single PostgreSQL database.
 
 #### Deciding Between Separate or Combined Microservices for Team and User Functions
 
