@@ -119,6 +119,8 @@ Consequently, the second strategy is to store tokens in a PostgreSQL database. C
 
 The final strategy utilizes JSON Web Tokens (JWT) to automatically generate tokens. These tokens don't require storage and are encapsulated in the HTTP request headers. This approach is not only more secure but also less development-intensive than the previous two methods. However, it comes with a functional drawback: it does not support server-side logout.
 
+In consideration of speed, development cost, security, and functionality, we have ultimately decided to use JSON Web Tokens (JWT) for token generation and verification, despite its inability to support server-side logout.
+
 ## Critique
 
 ## Evaluation
