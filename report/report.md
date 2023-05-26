@@ -22,6 +22,22 @@
 There is no scientific way found to determine the difficulty of a word, we decided to allow users to add their own word,
 they can also delete word if they want.
 
+## Scope
+The MVP should be able to:
+- Basic Functionality
+  - Signup/Login/Logout
+- Word Learning
+  - Add/Delete word they want to learn/
+  - Update word status (choose "remember" or "forget" a word)
+  - Show personal progress
+  - Set personal plan
+  - Show word learning history
+- Team Learning
+  - Build new team/Add me to a team/leave a team
+  - Set team plan
+  - Check team information (including team members, team progress, team plan).
+
+
 ## Architecture
 
 The architecure is a Service-based Architecture
