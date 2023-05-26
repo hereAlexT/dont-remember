@@ -134,6 +134,26 @@ server-side logout.
 In consideration of speed, development cost, security, and functionality, we have ultimately decided to use JSON Web
 Tokens (JWT) for token generation and verification, despite its inability to support server-side logout.
 
+#### Deciding Between Separate or Combined Microservices for Team and User Functions
+
+Should Team and User function be seperated into two microservices?
+
+- Separate Team and User as Two Microservices
+    - Pros:
+        - Easy to development, each microservice only need to handle one type of request.
+    - Cons:
+        - Developing two microservices will increase development costs. 
+        - Our current database has a capacity of 300 connections; separating them will establish more connections when scaling out, necessitating a database upgrade.
+        - Need a method a figure how to communicate between Team and User, because they are highly related.
+- Put Team and User in the Same Microservices
+    - Pros:
+        - Lower development and deployment cost.
+        - Easier communication between Team and User.
+        - The current database capacity of 300 connections is sufficient.
+    - Cons:
+        - Potential deployment waste, since requests to users are more frequent than requests to teams.
+Considered this is a MVP, we decided to put Team and User in the same microservice.
+
 ## Critique
 
 ## Evaluation
