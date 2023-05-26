@@ -1,40 +1,60 @@
 # Don't Remember
+
 [Original Proposal](https://csse6400.github.io/project-proposal-2023/s4786694/proposal.html)
+
 ## Abstract
 
 ## Proposal Clarification
+
 [ ] Study plan in proposal and here
 
 ## Changes
-The project proposal implied that the functionality should be displayed through web or mobile application. As a proper UI is not needed to meet the evaluation criterias, it was decided that the functionality would be implemented through APIs. The functionality was decided to be demonstrated with a CLI application.
-[ ] Change of the level of English Study
-[ ] Choose the vocabulary book
-[ ] Dynamatically change the study plan
+
+- In the proposal, it says _choose the vocabulary book(example: IELTS,Oxford)_. For the copyright constraint, we
+  selected
+  an opensource dictionary [WordSet](https://github.com/wordset/wordset-dictionary) as our dictionary.
+- In the proposal, it says:
+
+> when user have a period of time without using this software to study, it will decrease the new daily words and show
+> more learned words to review. And if user learn new words quickly in recent days, it will increase the difficulty and
+> show more new words in the future study.
+
+There is no scientific way found to determine the difficulty of a word, we decided to allow users to add their own word,
+they can also delete word if they want.
 
 ## Architecture
+
 The architecure is a Service-based Architecture
-
-
 
 ## Trade-Offs
 
 ## Critique
 
 ## Evaluation
+
 ### Security Tests
-To address security concerns, we have implemented access control for user data. To use the functionality users must generate a token with the /login endpoint of the users API. We have created a suite of automated tests to test if the tokens can provide all information of a user, and if user's data is protected by the token.
+
+To address security concerns, we have implemented access control for user data. To use the functionality users must
+generate a token with the /login endpoint of the users API. We have created a suite of automated tests to test if the
+tokens can provide all information of a user, and if user's data is protected by the token.
 
 ### Functionality Tests
+
 A suite of automated tests check if the implemented function provide the correct input.
 
 ### Availability Tests
-The following tests aim to determine the longevity of the service. Due to time limitation, we test whether our application can run for a full day.
+
+The following tests aim to determine the longevity of the service. Due to time limitation, we test whether our
+application can run for a full day.
 
 ### Maintainability Tests
-To support the future of our application, we try to test if our architecture can hold up for future test cases. One case is database migrations, where we have implemented functionality for this, incase we want to configure out databases in the future. 
 
+To support the future of our application, we try to test if our architecture can hold up for future test cases. One case
+is database migrations, where we have implemented functionality for this, incase we want to configure out databases in
+the future.
 
 ### Scalability Tests
+
 We test how our architecture handles high loads.
 
 ## Reflections
