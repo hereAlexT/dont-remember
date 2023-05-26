@@ -117,6 +117,11 @@ the scope.
 
 ### How does it achieve Quality Attributes?
 
+#### Security
+
+In the "Don't Remember" project, we enhance security through the use of Tokens and JWT. Tokens serve as proof of identity and authorization; users carry them in their subsequent requests, and our servers validate these Tokens to confirm identities. Furthermore, JWT, with its self-contained nature, contains all necessary information, reducing the need for constant database queries. This design enables secure and efficient identity verification, authorization, and cross-domain authentication, all while significantly bolstering the system's security.
+
+
 #### Reliability
 
 Our architectural design is fault-tolerant, for the reason that firstly, we use AWS ECS to host our services, which
@@ -141,6 +146,10 @@ only need to update the docker image, and the ECS will automatically update the 
 
 - AWS ECS is used with auto-scaling policies.
 - Microservices architecture is used, when requests to one microservice are increased, it can be scaled easily.
+
+#### Extensibility
+
+In the "Don't Remember" project, scalability is predominantly showcased through our use of a microservices architecture. Leveraging the inherent decoupling characteristics of this architecture, we can add new functionalities by simply creating a new microservice. Additionally, we provide well-defined and decoupled endpoints, making it convenient for future developers to build new features based on this foundation. Moreover, the employment of JWT alleviates server load, freeing up more resources for potential service expansion.
 
 ## Trade-Offs
 
