@@ -20,7 +20,7 @@ Date: 2023-4-19
     - The front-end can complete complex logical behaviors according to the user's behavior, generate an instruction and send it to the back-end to query the dictionary
     - The back-end only needs to be responsible for executing the instructions transmitted by the front-end and connecting to the database, and then sending back data such as dictionary definitions
 - Delivering functional requirements requires complex processing and database transactions.
-    - Product recommendations based on both a customer's history and on purchasing behaviour of similar customers.
+    - Progress based on both a user's history and behaviour.
     - Recording all customer interactions in the application.
 - Sales department wants customers to be able to change between using mobile and web applications without interrupting their sales experience.
 - Development team has experience using Java.
