@@ -23,6 +23,7 @@ Date: 2023-4-19
     - Progress based on both a user's history and behaviour.
     - Recording all users' word history.
     - Team fuction.
+    - In order to ensure security, an expirable token should be generated when the user logs in and then stored in redis
 - Development team has experience using Python.
 
 ## Decision

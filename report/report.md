@@ -139,7 +139,7 @@ if one service is down, the load balancer will redirect or start a new service.
 - Similar to Reliability, there is a health endpoint in each service, the load balancer will check the health of each
   one, if fails, new service will be started.
 
-### Maintainability
+#### Maintainability
 
 Terraform is used to manage the infrastructure, which makes it easy to maintain and update. ECS is used, when update, we
 only need to update the docker image, and the ECS will automatically update the service.

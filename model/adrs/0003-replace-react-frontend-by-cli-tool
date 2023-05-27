@@ -15,11 +15,13 @@ After discussing with our course lecturer, instead of developing a frontend, we 
 
 - Our team has no experience in frontend development, especially with React.
 - A demo tool is necessary to show the business logic of our software.
+- The Strategies for storing tokens
 
 
 ## Decision
 
 - Replace the React frontend with a CLI tool.
+- Upon conducting our research, we discovered that we could generate tokens utilizing JSON Web Tokens (JWT) without necessitating their storage. These tokens would be encapsulated within the headers of HTTPS requests, contributing to a reduction in server load.
 
 ## Consequences
 
