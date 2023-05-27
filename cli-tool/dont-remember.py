@@ -7,8 +7,8 @@ import requests
 import textwrap
 from tabulate import tabulate
 
-USER_ENDPOINT = "http://localhost:8888/api/v1/users"
-WORD_ENDPOINT = "http://localhost:8889/api/v1/words"
+USER_ENDPOINT = 'http://dont-remember-123619125.us-east-1.elb.amazonaws.com/api/v1/users'
+WORD_ENDPOINT = 'http://dont-remember-123619125.us-east-1.elb.amazonaws.com/api/v1/words'
 
 
 class RequestHandler:
