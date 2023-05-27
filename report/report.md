@@ -312,13 +312,13 @@ We make some changed in both users and words services and update the container v
 deploy latest update.
 
 #### Test Workflow
-Before maintenance, we record the current revision, in this case, revision = 3.
+Before maintenance, we record the current revision, in this case, revision = 3.<br>
 <img src="./images/maintain_1.png" width="400" alt="Before Maintenance"><br>
-Then, we update codes and use Terraform to update.
+Then, we update codes and use Terraform to update.<br>
 <img src="./images/maintain_2.png" width="400" alt="Update Requests"><br>
-During maintenance, a new task (revision = 4) is initialized.
+During maintenance, a new task (revision = 4) is initialized.<br>
 <img src="./images/maintain_3.png" width="400" alt="While Maintenance"><br>
-After maintenance, only one instance with revision = 4 exists.
+After maintenance, only one instance with revision = 4 exists.<br>
 <img src="./images/maintain_4.png" width="400" alt="After Maintenance"><br>
 
 ### Scalability Tests
