@@ -21,7 +21,8 @@ After discussing with our course lecturer, instead of developing a frontend, we 
 ## Decision
 
 - Replace the React frontend with a CLI tool.
-- Upon conducting our research, we discovered that we could generate tokens utilizing JSON Web Tokens (JWT) without necessitating their storage. These tokens would be encapsulated within the headers of HTTPS requests, contributing to a reduction in server load.
+- Upon conducting our research, we discovered that we could generate tokens utilizing JSON Web Tokens (JWT) without necessitating 
+their storage. These tokens would be encapsulated within the headers of HTTPS requests, contributing to a reduction in server load.
 
 ## Consequences
 
