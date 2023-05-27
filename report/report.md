@@ -311,7 +311,7 @@ application can run for a full day, checking if the health endpoints of each API
 We make some changed in both users and words services and update the container version, they used `terraform apply` to
 deploy latest update.
 
-#### Test Workflow
+#### Test Workflow & Result
 Before maintenance, we record the current revision, in this case, revision = 3.<br>
 <img src="./images/maintain_1.png" width="600" alt="Before Maintenance"><br>
 Then, we update codes and use Terraform to update.<br>
@@ -320,6 +320,8 @@ During maintenance, a new task (revision = 4) is initialized.<br>
 <img src="./images/maintain_3.png" width="600" alt="While Maintenance"><br>
 After maintenance, only one instance with revision = 4 exists.<br>
 <img src="./images/maintain_4.png" width="600" alt="After Maintenance"><br>
+
+As shown above, tests passed.
 
 ### Scalability Tests
 
