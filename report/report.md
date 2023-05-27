@@ -259,70 +259,69 @@ We set some cases for each function, and compare actual results with excepted re
 
 - Case1: new user signup
   - Step:
-    -  1. Start system, it will show a welcome page
-    -  2. Type “signup” add “username”  
-    -  3. Type  a new password
+   -  1. Start system, it will show a welcome page
+   -  2. Type “signup” add “username”  
+   -  3. Type  a new password
   - Excepted results: 
   - The system shows ”Signup success, Please login to continue”.
-<img src="./images/CLI-Case1.png" width="400">
+- <img src="./images/CLI-Case1.png" width="400">
 
 - Case2: user login
   - Premise: 
   - Need to finish case 1
   - Step:
-    - 1. Type “login” add “username” (username need to change)
-    - 2. Type password
+   - 1. Type “login” add “username” (username need to change)
+   - 2. Type password
   - Excepted results 
   - Branch 1: type the correct password, shows “Login success”.
   - Branch 2: if the username or password is incorrect, shows error.
-<img src="./images/CLI-Case2.png" width="400">
+- <img src="./images/CLI-Case2.png" width="400">
 
 - Case 3: add words
-Premise: 
-Login success.
-Step:
-Type “add” “word” (word need to change)
-Excepted results:
-Branch1: Shows “Add word success”.
-Branch2: shows error, if the word is not exist
+  - Premise: 
+   - Login success.
+  - Step:
+   - Type “add” “word” (word need to change)
+  - Excepted results:
+   - Branch1: Shows “Add word success”.
+   - Branch2: shows error, if the word is not exist
 <img src="./images/CLI-Case3.png" width="400">
-<br>
 - Case 4: study word
-Premise: 
-Login success, words added.
-Step:
-Type “nextword”
-Excepted results:
-Shows a word and its explanation
+- Premise: 
+  - Login success, words added.
+- Step:
+  - Type “nextword”
+- Excepted results:
+  - Shows a word and its explanation
 <img src="./images/CLI-Case4.png" width="400">
-<br>
+
 - Case 5: remember/forget word
-Premise: 
-Login success, case 4 finished.
-Step:
-Type “updateword remember” or “updateword forget”
-Excepted results:
-Shows “Update word success”
+  - Premise: 
+   - Login success, case 4 finished.
+  - Step:
+   - Type “updateword remember” or “updateword forget”
+  - Excepted results:
+   - Shows “Update word success”
 <img src="./images/CLI-Case5.png" width="400">
-<br>
+
 - Case 6: view history
-Premise:
-Login success, case 5 finished.
-Step:
-Type “learninghistory”
-Excepted results:
-Shows user’s study history and plan
+  - Premise:
+   - Login success, case 5 finished.
+  - Step:
+   - Type “learninghistory”
+  - Excepted results:
+   - Shows user’s study history and plan
 <img src="./images/CLI-Case6.png" width="400">
-<br>
+
 - Case 7: view personal progress
-Premise:
-Login success.
-Step:
-Type “personalprogress”
-Excepted results:
-Shows user’s study progress. (the default plan is 20 words)
+  - Premise:
+   - Login success.
+  - Step:
+   - Type “personalprogress”
+  - Excepted results:
+   - Shows user’s study progress. (the default plan is 20 words)
 <img src="./images/CLI-Case7.png" width="400">
-<br>
+
 - Case 8: change personal study plan
 Premise: 
 Login success
