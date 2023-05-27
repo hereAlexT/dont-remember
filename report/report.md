@@ -263,7 +263,7 @@ Step:
 	3. Type  a new password
 Excepted results: 
 	The system shows ”Signup success, Please login to continue”.
-[image:B452BA58-AA5E-4165-9017-563EB455D691-1927-00003115166B6769/截屏2023-05-27 20.53.59.png]
+	<img src="./images/CLI-Case1.png" width="400">
 
 Case2: user login
 Premise: 
@@ -273,9 +273,9 @@ Step:
 	2. Type password
 Excepted results 
 	Branch 1: type the correct password, shows “Login success”.
+	<img src="./images/CLI-Case2.png" width="400">
 	Branch 2: if the username or password is incorrect, shows error.
-[image:F28AA559-BB79-499F-9EA2-D62D39F91261-1927-00003121DF9F70A9/截屏2023-05-27 20.55.03.png]
-
+	
 Case 3: add words
 Premise: 
 	Login success.
@@ -283,7 +283,7 @@ Step:
 	Type “add” “word” (word need to change)
 Excepted results:
 	Branch1: Shows “Add word success”.
-[image:D7BA2940-A5CD-49D7-902F-1B49511810BC-1927-0000312BB7B049CC/截屏2023-05-27 20.55.43.png]
+	<img src="./images/CLI-Case3.png" width="400">
 	Branch2: shows error, if the word is not exist.
 
 Case 4: study word
@@ -293,7 +293,7 @@ Step:
 	Type “nextword”
 Excepted results:
 	Shows a word and its explanation.
-[image:9539C881-40C0-4734-8ABB-7D79DEA02F62-1927-0000313B3B123AF1/截屏2023-05-27 20.56.49.png]
+	<img src="./images/CLI-Case4.png" width="400">
 
 Case 5: remember/forget word
 Premise: 
@@ -302,7 +302,7 @@ Step:
 	Type “updateword remember” or “updateword forget”
 Excepted results:
 	Shows “Update word success”.
-[image:41491C3E-431E-48B8-B764-4FE642D13491-1927-000031486C572D65/截屏2023-05-27 20.57.42.png]
+	<img src="./images/CLI-Case5.png" width="400">
 
 Case 6: view history
 Premise:
@@ -311,7 +311,7 @@ Step:
 	Type “learninghistory”
 Excepted results:
 	Shows user’s study history and plan.
-[image:4EDBF675-1CEB-47F9-8310-4B539D57DC86-1927-000031644BF69BFD/截屏2023-05-27 20.59.47.png]
+	<img src="./images/CLI-Case6.png" width="400">
 
 Case 7: view personal progress
 Premise:
@@ -320,7 +320,7 @@ Step:
 	Type “personalprogress”
 Excepted results:
 	Shows user’s study progress. (the default plan is 20 words)
-[image:7EB052D4-2BD2-47B3-91E9-95D98ACF137D-1927-0000316F48A9C96B/截屏2023-05-27 21.00.36.png]
+	<img src="./images/CLI-Case7.png" width="400">
 
 Case 8: change personal study plan
 Premise: 
@@ -329,7 +329,7 @@ Step:
 	Type ”changeplan” add “number”
 Excepted results:
 	Shows “Set plan success”. Repeat the case7, it will show new study plan.
-[image:6A4ED804-219B-4417-904E-44D3F550A69B-1927-0000317DEA8FB0AB/截屏2023-05-27 21.01.39.png]
+	<img src="./images/CLI-Case8.png" width="400">
 
 Case 9: delete words
 Premise:
@@ -338,7 +338,7 @@ Step:
 	Type “deleteword” add “word” (word need to change)
 Excepted results:
 	Branch1: Shows “Delete word success”, repeat case6, the deleted word will not show.
-[image:9140520F-23F5-4C8F-B2CD-9449049D69D8-1927-00003188690FFE91/截屏2023-05-27 21.02.22.png]
+	<img src="./images/CLI-Case9.png" width="400">
 	Branch2: Shows error, if the word is not exist.
 
 Case 10: Create a new team
@@ -348,18 +348,18 @@ Step:
 	Type “newteam” add “team name”  (team name need to change)
 Excepted results:
 	Shows “Create new team success”.
-[image:0778D11B-4F06-4C6A-9F01-859F2315F4EF-1927-0000319357CD800D/截屏2023-05-27 21.03.11.png]
+	<img src="./images/CLI-Case10.png" width="400">
 
-Case 10: view your team
+Case 11: view your team
 Premise: 
 	Login success, case 10 finished
 Step:
 	Type “”teaminfo
 Excepted results:
 	Shows “Team Name”, ”Team UUID”, ”Plan” and “Member Info”.
-[image:554F8A26-D6AC-4FF1-8156-B97A95AF7204-1927-0000319B3A26737D/截屏2023-05-27 21.03.43.png]
+	<img src="./images/CLI-Case11.png" width="400">
 
-Case 11: join a team
+Case 12: join a team
 Premise: 
 	another user finished case2. 
 Step:
@@ -367,10 +367,10 @@ Step:
 	2. Type “addteam” add “team uuid” (team uuid need to change)
 Excepted results:
 	Branch1: Shows “Add team success” repeat case10, it will show new team info.
-[image:51656CB6-A0BF-4D2E-B57B-A2187B551F50-1927-000031B09EC831D0/截屏2023-05-27 21.05.14.png]
+	<img src="./images/CLI-Case12.png" width="400">
 	Branch 2: Shows error, if the team uuid is incorrect.
 	
-Case 12: leave a team
+Case 13: leave a team
 Premise: 
 	Login success
 	Joined a team
@@ -378,25 +378,25 @@ Step:
 	Type “leaveteam” add “team uuid” (team uuid need to change)
 Excepted results:
 	Shows “Leave team success”, repeat case 10, user will not show in team info.
-[image:1F53E47A-FD5C-4F70-97E6-A18E53207688-1927-000031BBEA18ED32/截屏2023-05-27 21.05.58.png]
+	<img src="./images/CLI-Case13.png" width="400">
 
-Case 13: update team’s study plan
+Case 14: update team’s study plan
 Premise:
 	Login success, team joined.
 Step:
 	Type ”changeteamplan” add “team uuid” add ”number” (team uuid and number need to change)
 Excepted results:
 	Shows ”Set plan success”, repeat case 10, the team study plan has changed.
-[image:B101F42C-A4B1-4A16-B27F-832E487FA9D7-1927-000031D7FA4FAFAA/截屏2023-05-27 21.08.02.png]
+	<img src="./images/CLI-Case14.png" width="400">
 
-Case 14: logout
+Case 15: logout
 Premise:
 	Login success
 Step:
 	Type “logout”
 Excepted results:
 	Shows “Logout success”, return to welcome page
-[image:7B2BE369-140B-4E59-9000-F91112A0FD50-1927-000031E2B72A0187/截屏2023-05-27 21.08.45.png]
+	<img src="./images/CLI-Case15.png" width="400">
 
 ### Security Tests
 
