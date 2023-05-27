@@ -273,8 +273,8 @@ Step:
 	2. Type password
 Excepted results 
 	Branch 1: type the correct password, shows “Login success”.
-	<img src="./images/CLI-Case2.png" width="400">
 	Branch 2: if the username or password is incorrect, shows error.
+	<img src="./images/CLI-Case2.png" width="400">
 	
 Case 3: add words
 Premise: 
@@ -283,8 +283,8 @@ Step:
 	Type “add” “word” (word need to change)
 Excepted results:
 	Branch1: Shows “Add word success”.
-	<img src="./images/CLI-Case3.png" width="400">
 	Branch2: shows error, if the word is not exist.
+	<img src="./images/CLI-Case3.png" width="400">
 
 Case 4: study word
 Premise: 
@@ -338,8 +338,8 @@ Step:
 	Type “deleteword” add “word” (word need to change)
 Excepted results:
 	Branch1: Shows “Delete word success”, repeat case6, the deleted word will not show.
-	<img src="./images/CLI-Case9.png" width="400">
 	Branch2: Shows error, if the word is not exist.
+	<img src="./images/CLI-Case9.png" width="400">
 
 Case 10: Create a new team
 Premise: 
@@ -367,8 +367,8 @@ Step:
 	2. Type “addteam” add “team uuid” (team uuid need to change)
 Excepted results:
 	Branch1: Shows “Add team success” repeat case10, it will show new team info.
-	<img src="./images/CLI-Case12.png" width="400">
 	Branch 2: Shows error, if the team uuid is incorrect.
+	<img src="./images/CLI-Case12.png" width="400">
 	
 Case 13: leave a team
 Premise: 
