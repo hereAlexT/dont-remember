@@ -379,7 +379,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows “Leave team success”, repeat case 10, user will not show in team info.
 <img src="./images/CLI-Case13.png" width="400">
 
-- Case 14: update team’s study plan
+Case 14: update team’s study plan
   - Premise:
     - Login success, team joined.
   - Step:
@@ -388,13 +388,13 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows ”Set plan success”, repeat case 10, the team study plan has changed
 <img src="./images/CLI-Case14.png" width="400">
 
-- Case 15: logout
-Premise:
-Login success
-Step:
-Type “logout”
-Excepted results:
-Shows “Logout success”, return to welcome page
+Case 15: logout
+  - Premise:
+    - Login success
+  - Step:
+    - Type “logout”
+  - Excepted results:
+    - Shows “Logout success”, return to welcome page
 <img src="./images/CLI-Case15.png" width="400">
 
 ### Security Tests
