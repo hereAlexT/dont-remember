@@ -117,6 +117,11 @@ the scope.
 
 ### How does it achieve Quality Attributes?
 
+#### Security
+
+In the "Don't Remember" project, we enhance security through the use of Tokens and JWT. Tokens serve as proof of identity and authorization; users carry them in their subsequent requests, and our servers validate these Tokens to confirm identities. Furthermore, JWT, with its self-contained nature, contains all necessary information, reducing the need for constant database queries. This design enables secure and efficient identity verification, authorization, and cross-domain authentication, all while significantly bolstering the system's security.
+
+
 #### Reliability
 
 Our architectural design is fault-tolerant, for the reason that firstly, we use AWS ECS to host our services, which
@@ -141,6 +146,10 @@ only need to update the docker image, and the ECS will automatically update the 
 
 - AWS ECS is used with auto-scaling policies.
 - Microservices architecture is used, when requests to one microservice are increased, it can be scaled easily.
+
+#### Extensibility
+
+In the "Don't Remember" project, scalability is predominantly showcased through our use of a microservices architecture. Leveraging the inherent decoupling characteristics of this architecture, we can add new functionalities by simply creating a new microservice. Additionally, we provide well-defined and decoupled endpoints, making it convenient for future developers to build new features based on this foundation. Moreover, the employment of JWT alleviates server load, freeing up more resources for potential service expansion.
 
 ## Trade-Offs
 
@@ -201,11 +210,14 @@ Should Team and User function be seperated into two microservices?
           Considered this is a MVP, we decided to put Team and User in the same microservice.
 
 ## Critique
+### Security
+JWT is able to secure the data of the users in the API. All tests currently pass for security, the api is able to retrieve user information with a token. Without a token no information can be retrieved, as the token is also used to identify the user making the request. Additionally there is an expiration time on the token, and it is confirmed by the tests that the user can not use an expired token to retreive information. There are some long term concerns with this API's JWT implementation. If a account if comprimised in the future, there is no current method to revoke access to any tokens created by the account. So a malicious user can still retrieve data with a stolen token until it expires. This will be be balance of the expiration time of the token. It must be set to a time where it will not inconvenience the user, but also protect them if their account is comprimised.
 
 ### Functionality
 
 The following screenshots shows the functionality test of the system, the test result is conducted on the deployed
-environment on AWS.
+environment on AWS.<br>
+
 <img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
 <img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
 From the test results, we can see that all the functionalities are working as expected.
@@ -214,10 +226,21 @@ From the test results, we can see that all the functionalities are working as ex
 
 
 ### Security Tests
+All tests are made using the pytest library, and can be run with the command "pytest [filename]"
 
+#### Test Plan
 To address security concerns, we have implemented access control for user data. To use the functionality users must
 generate a token with the /login endpoint of the users API. We have created a suite of automated tests to test if the
 tokens can provide all information of a user, and if user's data is protected by the token.
+
+First the suite tests whether the token is able to be used to use the functionality of the words API. Then it tests whether the word API can be used without a token, passing if it doesn't leak any information. Then the final test waits for the token to expire and then tests if every endpoint is able to be accessed with an expired token.
+
+#### Test Link
+- [Security Tests](../tests/test_security.py)
+
+#### Results
+<br>
+<img src="./images/test_security.png" width="400" alt="Test Result of test_func_user">
 
 ### Functionality Tests
 
@@ -239,8 +262,13 @@ then they are tested after being deployed on AWS.
 
 ### Availability Tests
 
+#### Test Plan
 The following tests aim to determine the longevity of the service. Due to time limitation, we test whether our
-application can run for a full day.
+application can run for a full day, checking if the health endpoints of each API hourly.
+
+#### Test Link
+
+- [Availability Test](../tests/test_availability.py)
 
 ### Maintainability Tests
 
