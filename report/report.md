@@ -255,26 +255,26 @@ The purpose of this test is to recreate user scenarios. This test includes all f
 
 #### Test Workflow&Result
 
-We set some cases for each function, and compare actual results with excepted results.
-Case1: new user signup
-Step:
-	1. Start system, it will show a welcome page
-	2. Type “signup” add “username”  
-	3. Type  a new password
-Excepted results: 
-	The system shows ”Signup success, Please login to continue”.
+- We set some cases for each function, and compare actual results with excepted results.
+- Case1: new user signup
+- Step:
+	- 1. Start system, it will show a welcome page
+	- 2. Type “signup” add “username”  
+	- 3. Type  a new password
+- Excepted results: 
+	- The system shows ”Signup success, Please login to continue”.
 	<br>
 	<img src="./images/CLI-Case1.png" width="400">
 
-Case2: user login
-Premise: 
-	Need to finish case 1
-Step:
-	1. Type “login” add “username” (username need to change)
-	2. Type password
-Excepted results 
-	Branch 1: type the correct password, shows “Login success”.
-	Branch 2: if the username or password is incorrect, shows error.
+- Case2: user login
+- Premise: 
+	- Need to finish case 1
+- Step:
+	- 1. Type “login” add “username” (username need to change)
+	- 2. Type password
+- Excepted results 
+	- Branch 1: type the correct password, shows “Login success”.
+	- Branch 2: if the username or password is incorrect, shows error.
 	<br>
 	<img src="./images/CLI-Case2.png" width="400">
 	
