@@ -286,6 +286,7 @@ Case 3: add words
     - Branch1: Shows “Add word success”.
     - Branch2: shows error, if the word is not exist
 <img src="./images/CLI-Case3.png" width="400">
+
 Case 4: study word
   - Premise: 
     - Login success, words added.
