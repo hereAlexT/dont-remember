@@ -50,7 +50,6 @@ The MVP should be able to:
 
 ## Architecture
 
-
 ### System Landscape
 
 <img src="../model/dont-remember-system-landscape-architecture.png" width="600" alt="System Landscape">
@@ -307,9 +306,20 @@ application can run for a full day, checking if the health endpoints of each API
 
 ### Maintainability Tests
 
-To support the future of our application, we try to test if our architecture can hold up for future test cases. One case
-is database migrations, where we have implemented functionality for this, incase we want to configure out databases in
-the future.
+#### Test Plan
+
+We make some changed in both users and words services and update the container version, they used `terraform apply` to
+deploy latest update.
+
+#### Test Workflow
+Before maintenance, we record the current revision, in this case, revision = 3.
+<img src="./images/maintain_1.png" width="400" alt="Before Maintenance"><br>
+Then, we update codes and use Terraform to update.
+<img src="./images/maintain_2.png" width="400" alt="Update Requests"><br>
+During maintenance, a new task (revision = 4) is initialized.
+<img src="./images/maintain_3.png" width="400" alt="While Maintenance"><br>
+After maintenance, only one instance with revision = 4 exists.
+<img src="./images/maintain_4.png" width="400" alt="After Maintenance"><br>
 
 ### Scalability Tests
 
