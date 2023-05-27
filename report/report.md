@@ -53,7 +53,7 @@ The MVP should be able to:
 ### System Landscape
 
 <img src="../model/dont-remember-system-landscape-architecture.png" width="600" alt="System Landscape">
-In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't
+In the diagram above, we observe two distinct software systems and one role represented within the system landscape of Don't
 Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB)
 project, the _user_ role primarily symbolizes staff members.
 
