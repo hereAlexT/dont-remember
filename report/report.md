@@ -257,7 +257,7 @@ The purpose of this test is to recreate user scenarios. This test includes all f
 
 We set some cases for each function, and compare actual results with excepted results.
 
-- Case1: new user signup
+Case1: new user signup
   - Step:
     -  1. Start system, it will show a welcome page
     -  2. Type “signup” add “username”  
@@ -266,7 +266,7 @@ We set some cases for each function, and compare actual results with excepted re
     - The system shows ”Signup success, Please login to continue”.
 <img src="./images/CLI-Case1.png" width="400">
 
-- Case2: user login
+Case2: user login
   - Premise: 
     - Need to finish case 1
   - Step:
@@ -277,7 +277,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Branch 2: if the username or password is incorrect, shows error.
 <img src="./images/CLI-Case2.png" width="400">
 
-- Case 3: add words
+Case 3: add words
   - Premise: 
     - Login success.
   - Step:
@@ -286,7 +286,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Branch1: Shows “Add word success”.
     - Branch2: shows error, if the word is not exist
 <img src="./images/CLI-Case3.png" width="400">
-- Case 4: study word
+Case 4: study word
   - Premise: 
     - Login success, words added.
   - Step:
@@ -295,7 +295,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows a word and its explanation
 <img src="./images/CLI-Case4.png" width="400">
 
-- Case 5: remember/forget word
+Case 5: remember/forget word
   - Premise: 
     - Login success, case 4 finished.
   - Step:
@@ -304,7 +304,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows “Update word success”
 <img src="./images/CLI-Case5.png" width="400">
 
-- Case 6: view history
+Case 6: view history
   - Premise:
     - Login success, case 5 finished.
   - Step:
@@ -313,7 +313,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows user’s study history and plan
 <img src="./images/CLI-Case6.png" width="400">
 
-- Case 7: view personal progress
+Case 7: view personal progress
   - Premise:
     - Login success.
   - Step:
@@ -322,7 +322,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows user’s study progress. (the default plan is 20 words)
 <img src="./images/CLI-Case7.png" width="400">
 
-- Case 8: change personal study plan
+Case 8: change personal study plan
   - Premise: 
     - Login success
   - Step:
@@ -331,7 +331,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows “Set plan success”. Repeat the case7, it will show new study plan
 <img src="./images/CLI-Case8.png" width="400">
 
-- Case 9: delete words
+Case 9: delete words
   - Premise:
     - Login success, words added.
   - Step:
@@ -341,7 +341,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Branch2: Shows error, if the word is not exist.
 <img src="./images/CLI-Case9.png" width="400">
 
-- Case 10: Create a new team
+Case 10: Create a new team
   - Premise: 
     - Login success
   - Step:
@@ -350,7 +350,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows “Create new team success”
 <img src="./images/CLI-Case10.png" width="400">
 
-- Case 11: view your team
+Case 11: view your team
   - Premise: 
     - Login success, case 10 finished
   - Step:
@@ -359,7 +359,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Shows “Team Name”, ”Team UUID”, ”Plan” and “Member Info”
 <img src="./images/CLI-Case11.png" width="400">
 
-- Case 12: join a team
+Case 12: join a team
   - Premise: 
     - another user finished case2. 
   - Step:
@@ -370,7 +370,7 @@ We set some cases for each function, and compare actual results with excepted re
     - Branch 2: Shows error, if the team uuid is incorrect.
 <img src="./images/CLI-Case12.png" width="400">
 
-- Case 13: leave a team
+Case 13: leave a team
   - Premise: 
     - Login success,joined a team
   - Step:
