@@ -50,7 +50,6 @@ The MVP should be able to:
 
 ## Architecture
 
-The architecure is a Service-based Architecture
 
 ### System Landscape
 
@@ -231,10 +230,21 @@ user, but also protect them if their account is comprimised.
 
 ### Functionality
 
-The following screenshots shows the functionality test of the system, the test result is conducted on the deployed
-environment on AWS.<br>
+Well designed and comprehensive unit tests are passed as well as manual tests by CLI tool which shows that the app is
+running as expected.
 
-From the test results, we can see that all the functionalities are working as expected.
+### Scalability
+
+todo
+
+### Extensibility
+
+Microservices and well-designed decoupled API endpoints make the software extensible. Microservices make the system easy
+to extend new functions without the impact of previous services. Decoupled API endpoints make the client can customize
+the
+workflow. Besides, an endpoint `/word_history` endpoint, provide detailed records of the learning, the clients could
+utilize
+it to do stuff such as draw a user's forget curve.
 
 ## Evaluation
 
