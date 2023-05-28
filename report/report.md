@@ -314,6 +314,7 @@ User management
     - result: all pass
   - [token_verify]:
     - result: all pass
+
 team management
   - [new_team]:
     - result: all pass
@@ -325,6 +326,7 @@ team management
     - result: all pass
   - [team_info]:
     - result: all pass
+    
 words management
   - [add_new_word]:
     - result: all pass
