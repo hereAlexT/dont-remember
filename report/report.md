@@ -255,7 +255,7 @@ The purpose of this test is to recreate user scenarios. This test includes all f
 
 #### Test Link
 
-- [CLI Tool Test](../tests/cli_tool_test_logs.md)
+- [CLI Tool Test](cli_tool_test_logs.md)
 
 #### Results
 
