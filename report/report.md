@@ -315,7 +315,7 @@ User management
   - [token_verify]:
     - result: all pass
 
-team management
+Team management
   - [new_team]:
     - result: all pass
   - [add_me_to_team]:
@@ -326,8 +326,8 @@ team management
     - result: all pass
   - [team_info]:
     - result: all pass
-    
-words management
+
+Words management
   - [add_new_word]:
     - result: all pass
   - [word_history]:
