@@ -50,12 +50,10 @@ The MVP should be able to:
 
 ## Architecture
 
-The architecure is a Service-based Architecture
-
 ### System Landscape
 
 <img src="../model/dont-remember-system-landscape-architecture.png" width="600" alt="System Landscape">
-In Figure x, we observe two distinct software systems and one role represented within the system landscape of Don't
+In the diagram above, we observe two distinct software systems and one role represented within the system landscape of Don't
 Remember, which also includes users, other tools, and Don't Remember. As Don't Remember is a business-to-business (ToB)
 project, the _user_ role primarily symbolizes staff members.
 
@@ -119,8 +117,11 @@ the scope.
 
 #### Security
 
-In the "Don't Remember" project, we enhance security through the use of Tokens and JWT. Tokens serve as proof of identity and authorization; users carry them in their subsequent requests, and our servers validate these Tokens to confirm identities. Furthermore, JWT, with its self-contained nature, contains all necessary information, reducing the need for constant database queries. This design enables secure and efficient identity verification, authorization, and cross-domain authentication, all while significantly bolstering the system's security.
-
+In the "Don't Remember" project, we enhance security through the use of Tokens and JWT. Tokens serve as proof of
+identity and authorization; users carry them in their subsequent requests, and our servers validate these Tokens to
+confirm identities. Furthermore, JWT, with its self-contained nature, contains all necessary information, reducing the
+need for constant database queries. This design enables secure and efficient identity verification, authorization, and
+cross-domain authentication, all while significantly bolstering the system's security.
 
 #### Reliability
 
@@ -137,7 +138,7 @@ if one service is down, the load balancer will redirect or start a new service.
 - Similar to Reliability, there is a health endpoint in each service, the load balancer will check the health of each
   one, if fails, new service will be started.
 
-### Maintainability
+#### Maintainability
 
 Terraform is used to manage the infrastructure, which makes it easy to maintain and update. ECS is used, when update, we
 only need to update the docker image, and the ECS will automatically update the service.
@@ -149,7 +150,11 @@ only need to update the docker image, and the ECS will automatically update the 
 
 #### Extensibility
 
-In the "Don't Remember" project, scalability is predominantly showcased through our use of a microservices architecture. Leveraging the inherent decoupling characteristics of this architecture, we can add new functionalities by simply creating a new microservice. Additionally, we provide well-defined and decoupled endpoints, making it convenient for future developers to build new features based on this foundation. Moreover, the employment of JWT alleviates server load, freeing up more resources for potential service expansion.
+In the "Don't Remember" project, scalability is predominantly showcased through our use of a microservices architecture.
+Leveraging the inherent decoupling characteristics of this architecture, we can add new functionalities by simply
+creating a new microservice. Additionally, we provide well-defined and decoupled endpoints, making it convenient for
+future developers to build new features based on this foundation. Moreover, the employment of JWT alleviates server
+load, freeing up more resources for potential service expansion.
 
 ## Trade-Offs
 
@@ -210,35 +215,209 @@ Should Team and User function be seperated into two microservices?
           Considered this is a MVP, we decided to put Team and User in the same microservice.
 
 ## Critique
+
 ### Security
-JWT is able to secure the data of the users in the API. All tests currently pass for security, the api is able to retrieve user information with a token. Without a token no information can be retrieved, as the token is also used to identify the user making the request. Additionally there is an expiration time on the token, and it is confirmed by the tests that the user can not use an expired token to retreive information. There are some long term concerns with this API's JWT implementation. If a account if comprimised in the future, there is no current method to revoke access to any tokens created by the account. So a malicious user can still retrieve data with a stolen token until it expires. This will be be balance of the expiration time of the token. It must be set to a time where it will not inconvenience the user, but also protect them if their account is comprimised.
+
+JWT is able to secure the data of the users in the API. All tests currently pass for security, the api is able to
+retrieve user information with a token. Without a token no information can be retrieved, as the token is also used to
+identify the user making the request. Additionally there is an expiration time on the token, and it is confirmed by the
+tests that the user can not use an expired token to retreive information. There are some long term concerns with this
+API's JWT implementation. If a account if comprimised in the future, there is no current method to revoke access to any
+tokens created by the account. So a malicious user can still retrieve data with a stolen token until it expires. This
+will be be balance of the expiration time of the token. It must be set to a time where it will not inconvenience the
+user, but also protect them if their account is comprimised.
 
 ### Functionality
 
-The following screenshots shows the functionality test of the system, the test result is conducted on the deployed
-environment on AWS.<br>
+Well designed and comprehensive unit tests are passed as well as manual tests by CLI tool which shows that the app is
+running as expected.
 
-<img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
-<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
-From the test results, we can see that all the functionalities are working as expected.
+### Scalability
+
+todo
+
+### Extensibility
+
+Microservices and well-designed decoupled API endpoints make the software extensible. Microservices make the system easy
+to extend new functions without the impact of previous services. Decoupled API endpoints make the client can customize
+the
+workflow. Besides, an endpoint `/word_history` endpoint, provide detailed records of the learning, the clients could
+utilize
+it to do stuff such as draw a user's forget curve.
 
 ## Evaluation
 
+### CLI Tool Test
+
+#### Test Plan
+
+The purpose of this test is to recreate user scenarios. This test includes all functions of Don’t Remember, simulations have been conducted for every possible usage scenario of the user, and every step of the user's operation has been simulated in the returned results.
+
+#### Test Workflow&Result
+
+We set some cases for each function, and compare actual results with excepted results.
+
+Case1: new user signup
+  - Step:
+    -  1. Start system, it will show a welcome page
+    -  2. Type “signup” add “username”  
+    -  3. Type  a new password
+  - Excepted results: 
+    - The system shows ”Signup success, Please login to continue”.
+<img src="./images/CLI-Case1.png" width="400">
+
+Case2: user login
+  - Premise: 
+    - Need to finish case 1
+  - Step:
+    - 1. Type “login” add “username” (username need to change)
+    - 2. Type password
+  - Excepted results 
+    - Branch 1: type the correct password, shows “Login success”.
+    - Branch 2: if the username or password is incorrect, shows error.
+<img src="./images/CLI-Case2.png" width="400">
+
+Case 3: add words
+  - Premise: 
+    - Login success.
+  - Step:
+    - Type “add” “word” (word need to change)
+  - Excepted results:
+    - Branch1: Shows “Add word success”.
+    - Branch2: shows error, if the word is not exist
+<img src="./images/CLI-Case3.png" width="400">
+
+Case 4: study word
+  - Premise: 
+    - Login success, words added.
+  - Step:
+    - Type “nextword”
+  - Excepted results:
+    - Shows a word and its explanation
+<img src="./images/CLI-Case4.png" width="400">
+
+Case 5: remember/forget word
+  - Premise: 
+    - Login success, case 4 finished.
+  - Step:
+    - Type “updateword remember” or “updateword forget”
+  - Excepted results:
+    - Shows “Update word success”
+<img src="./images/CLI-Case5.png" width="400">
+
+Case 6: view history
+  - Premise:
+    - Login success, case 5 finished.
+  - Step:
+    - Type “learninghistory”
+  - Excepted results:
+    - Shows user’s study history and plan
+<img src="./images/CLI-Case6.png" width="400">
+
+Case 7: view personal progress
+  - Premise:
+    - Login success.
+  - Step:
+    - Type “personalprogress”
+  - Excepted results:
+    - Shows user’s study progress. (the default plan is 20 words)
+<img src="./images/CLI-Case7.png" width="400">
+
+Case 8: change personal study plan
+  - Premise: 
+    - Login success
+  - Step:
+    - Type ”changeplan” add “number”
+  - Excepted results:
+    - Shows “Set plan success”. Repeat the case7, it will show new study plan
+<img src="./images/CLI-Case8.png" width="400">
+
+Case 9: delete words
+  - Premise:
+    - Login success, words added.
+  - Step:
+    - Type “deleteword” add “word” (word need to change)
+  - Excepted results:
+    - Branch1: Shows “Delete word success”, repeat case6, the deleted word will not show.
+    - Branch2: Shows error, if the word is not exist.
+<img src="./images/CLI-Case9.png" width="400">
+
+Case 10: Create a new team
+  - Premise: 
+    - Login success
+  - Step:
+    - Type “newteam” add “team name”  (team name need to change)
+  - Excepted results:
+    - Shows “Create new team success”
+<img src="./images/CLI-Case10.png" width="400">
+
+Case 11: view your team
+  - Premise: 
+    - Login success, case 10 finished
+  - Step:
+    - Type “”teaminfo
+  - Excepted results:
+    - Shows “Team Name”, ”Team UUID”, ”Plan” and “Member Info”
+<img src="./images/CLI-Case11.png" width="400">
+
+Case 12: join a team
+  - Premise: 
+    - another user finished case2. 
+  - Step:
+    - 1. Get the team uuid from your team member
+    - 2. Type “addteam” add “team uuid” (team uuid need to change)
+  - Excepted results:
+    - Branch1: Shows “Add team success” repeat case10, it will show new team info.
+    - Branch 2: Shows error, if the team uuid is incorrect.
+<img src="./images/CLI-Case12.png" width="400">
+
+Case 13: leave a team
+  - Premise: 
+    - Login success,joined a team
+  - Step:
+    - Type “leaveteam” add “team uuid” (team uuid need to change)
+  - Excepted results:
+    - Shows “Leave team success”, repeat case 10, user will not show in team info.
+<img src="./images/CLI-Case13.png" width="400">
+
+Case 14: update team’s study plan
+  - Premise:
+    - Login success, team joined.
+  - Step:
+    - Type ”changeteamplan” add “team uuid” add ”number” (team uuid and number need to change)
+  - Excepted results:
+    - Shows ”Set plan success”, repeat case 10, the team study plan has changed
+<img src="./images/CLI-Case14.png" width="400">
+
+Case 15: logout
+  - Premise:
+    - Login success
+  - Step:
+    - Type “logout”
+  - Excepted results:
+    - Shows “Logout success”, return to welcome page
+<img src="./images/CLI-Case15.png" width="400">
 
 ### Security Tests
+
 All tests are made using the pytest library, and can be run with the command "pytest [filename]"
 
 #### Test Plan
+
 To address security concerns, we have implemented access control for user data. To use the functionality users must
 generate a token with the /login endpoint of the users API. We have created a suite of automated tests to test if the
 tokens can provide all information of a user, and if user's data is protected by the token.
 
-First the suite tests whether the token is able to be used to use the functionality of the words API. Then it tests whether the word API can be used without a token, passing if it doesn't leak any information. Then the final test waits for the token to expire and then tests if every endpoint is able to be accessed with an expired token.
+First the suite tests whether the token is able to be used to use the functionality of the words API. Then it tests
+whether the word API can be used without a token, passing if it doesn't leak any information. Then the final test waits
+for the token to expire and then tests if every endpoint is able to be accessed with an expired token.
 
 #### Test Link
+
 - [Security Tests](../tests/test_security.py)
 
 #### Results
+
 <br>
 <img src="./images/test_security.png" width="400" alt="Test Result of test_func_user">
 
@@ -260,9 +439,15 @@ then they are tested after being deployed on AWS.
 1. Change the URl of endpoints in base.py
 2. Use command `pytest`
 
+#### Test Results
+
+<img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
+<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
+
 ### Availability Tests
 
 #### Test Plan
+
 The following tests aim to determine the longevity of the service. Due to time limitation, we test whether our
 application can run for a full day, checking if the health endpoints of each API hourly.
 
@@ -272,12 +457,27 @@ application can run for a full day, checking if the health endpoints of each API
 
 ### Maintainability Tests
 
-To support the future of our application, we try to test if our architecture can hold up for future test cases. One case
-is database migrations, where we have implemented functionality for this, incase we want to configure out databases in
-the future.
+#### Test Plan
+
+We make some changed in both users and words services and update the container version, they used `terraform apply` to
+deploy latest update.
+
+#### Test Workflow & Result
+Before maintenance, we record the current revision, in this case, revision = 3.<br>
+<img src="./images/maintain_1.png" width="600" alt="Before Maintenance"><br>
+Then, we update codes and use Terraform to update.<br>
+<img src="./images/maintain_2.png" width="600" alt="Update Requests"><br>
+During maintenance, a new task (revision = 4) is initialized.<br>
+<img src="./images/maintain_3.png" width="600" alt="While Maintenance"><br>
+After maintenance, only one instance with revision = 4 exists.<br>
+<img src="./images/maintain_4.png" width="600" alt="After Maintenance"><br>
+
+As shown above, tests passed.
 
 ### Scalability Tests
 
 We test how our architecture handles high loads.
 
 ## Reflections
+
+During the process of designing and implementing the project proposal for the "Don't Remember" application, We have learned several valuable lessons that would influence our approach in future projects. The biggest learning experience was the process of designing the architecture and how to test it. When given the project proposal, the presense of quality attributes greatly helped delever a quality product. Without it, we would have struggled to find the best solution to deliver the functionality. We were able to make important changes to the implementation and architecture by considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future. Additionally, designing an architecture first proved to make development substancially easier and also made it easier to split tasks between team members. For future project, we will be using quality attriutes and designing architecures to achieve the best implementation, as this project proves how beneficial it can be. Considering what we would do differently, we would change and add the quality attributes to more suitibly fit the project. At the start of the projet, the quality attributes were just a way to achieve marks. However, once it started to influence and design and helped us design for the future, it was evident that it was an important tool that should be used for design. So, if we could do it again, we would consider changing the quality attributes to better suit the project. 

@@ -11,5 +11,5 @@ variable "db_password" {
 }
 
 variable "image_version" {
-    default = "0.1"
+    default = "0.2"
 }

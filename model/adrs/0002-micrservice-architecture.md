@@ -18,6 +18,7 @@ support multiple platforms with minor modifications, thereby decreasing developm
 
 - The system should support both mobile and web application frontends.
 - The user experience should be consistent across platforms.
+- The Strategies for storing tokens
 - The development team has experience and is willing to specialize in the backend field.
 
 ## Decision
@@ -28,6 +29,7 @@ support multiple platforms with minor modifications, thereby decreasing developm
     - The partition is determined based on both technical and domain considerations.
 - The frontend should be implemented using React.
 - The backend should be implemented with the Python library, Flask.
+- Because the MVP development budget is limited, it is not appropriate to use redis to store tokens. As an alternative, tokens are stored in postgreSQL along with the users table.
 - Deployment should be done using Docker on AWS with Terraform for autoscaling.
 - The database should be implemented with PostgreSQL.
 
