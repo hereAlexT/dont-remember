@@ -302,6 +302,39 @@ then they are tested after being deployed on AWS.
 1. Change the URl of endpoints in base.py
 2. Use command `pytest`
 
+#### Tested APIs
+User management
+  - [signup]:
+    - input: username, password; output: 3 senarios(200,400,409)
+    - result: all pass
+  - [login]:
+    - input: username, password; output: 4 senarios(200,400,401,404)
+    - result: all pass
+  - [logout]:
+    - result: all pass
+  - [token_verify]:
+    - result: all pass
+team management
+  - [new_team]:
+    - result: all pass
+  - [add_me_to_team]:
+    - result: all pass
+  - [leave_team]:
+    - result: all pass
+  - [update_team]:
+    - result: all pass
+  - [team_info]:
+    - result: all pass
+words management
+  - [add_new_word]:
+    - result: all pass
+  - [word_history]:
+    - result: all pass
+  - [update_word]:
+    - result: all pass
+  - [next_word]:
+    - result: all pass
+
 #### Test Results
 
 <img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
