@@ -1,38 +1,50 @@
 import http from "k6/http";
 import { check, sleep } from "k6";
 
-export function user() {
-    const baseUrl = "http://your-api-url.com";
-  
+export function studier() {
+    const user_url = "http://dont-remember-123619125.us-east-1.elb.amazonaws.com/api/v1/users";
+    const word_url = "http://dont-remember-123619125.us-east-1.elb.amazonaws.com/api/v1/words";
+
     // Step 1: Generate random username and password
     const account = JSON.stringify({
-        "username": Math.random().toString(36),
-        "password": Math.random().toString(36)
+        username: Math.random().toString(36).slice(2),
+        password: Math.random().toString(36).slice(2)
     });
 
+    const params = { 
+        headers: { 
+            'Content-Type': 'application/json', 
+        }, 
+    }; 
+
     // Step 2: signup 
-    const signupUrl = `${baseUrl}/signup`;
-    const signupRes = http.post(signupUrl, account);
+    const signupUrl = `${user_url}/signup`;
+    let signupRes = http.post(signupUrl, account, params);
 
     check(signupRes, {
         "Signup successful": (res) => res.status === 200,
     });
 
     // Step 4: login
-    const loginUrl = `${baseUrl}/login`;
-    const loginRes = http.post(loginUrl, account);
+    const loginUrl = `${user_url}/login`;
+    const loginRes = http.post(loginUrl, account, params);
 
     check(loginRes, {
         "Login successful": (res) => res.status === 200,
     });
     const authToken = JSON.parse(loginRes.body).token;
-    const authHeader = { Authorization: `Bearer ${authToken}` };
+    const authHeader = { 
+        headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+        },
+    };
     
     // Step 5: Program adds words for user to study 
     const dictionaryWord = "horse"; 
     const addWordPayload = JSON.stringify({ "word": dictionaryWord });
-    const addWordUrl = `${baseUrl}/add_new_word`;
-    const addWordRes = http.post(addWordUrl, addWordPayload, { headers: authHeader});
+    const addWordUrl = `${word_url}/add_new_word`;
+    const addWordRes = http.post(addWordUrl, addWordPayload, authHeader);
 
     check(addWordRes, {
         "Word added successfully": (res) => res.status === 200,
@@ -40,8 +52,8 @@ export function user() {
 
 
     // Step 7: Get word to study
-    const nextWordUrl = `${baseUrl}/next_word`;
-    const nextWordRes = http.get(nextWordUrl, { headers: authHeader})
+    const nextWordUrl = `${word_url}/next_word`;
+    const nextWordRes = http.get(nextWordUrl, authHeader)
     
     check(nextWordRes, {
         "Next word retrieved successfully": (res) => res.status === 200,
@@ -57,8 +69,8 @@ export function user() {
         "result": "remember"
     }); 
 
-    const updateWordUrl = `${baseUrl}/update_word`;
-    const updateWordRes = http.put(updateWordUrl, studyPayLoad, { headers: authHeader});
+    const updateWordUrl = `${word_url}/update_word`;
+    const updateWordRes = http.put(updateWordUrl, studyPayLoad, authHeader);
 
     check(updateWordRes, {
         "Next word retrieved successfully": (res) => res.status === 200,
@@ -70,13 +82,13 @@ export function user() {
 export const options = { 
    scenarios: { 
       studier: { 
-         exec: 'user', 
+         exec: 'studier', 
          executor: "ramping-vus", 
          stages: [ 
-            { duration: "2m", target: 1000 }, 
-            { duration: "2m", target: 2500 }, 
-            { duration: "2m", target: 0 }, 
+            { duration: "4m", target: 1000 }, 
+            { duration: "4m", target: 2500 }, 
+            { duration: "4m", target: 0 }, 
          ], 
       }, 
-   }, 
+   } 
 };
