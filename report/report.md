@@ -419,7 +419,7 @@ for the token to expire and then tests if every endpoint is able to be accessed 
 #### Results
 
 <br>
-<img src="./images/test_security.png" width="400" alt="Test Result of test_func_user">
+<img src="./images/test_security.png" width="400" alt="Test Result of Security Tests">
 
 ### Functionality Tests
 
@@ -476,7 +476,32 @@ As shown above, tests passed.
 
 ### Scalability Tests
 
-We test how our architecture handles high loads.
+#### Test Plan
+We test how our architecture handles high loads. Using K6, we created one virtual user (VU) who signs in, logins, adds a new word, gets the word and studies it. At first, we tried to push the APIs to the limit, we ran the test for a total of 12 minutes with a ramping scale up with the follow values:
+- 4 minutes, target 1000
+- 4 minutes, target 2500
+- 4 minutes, target 0
+
+This test was able to manage very high loads, but we hit maximum instances of 22 total. After this we created a more suitable test which ran for a total of 28 minutes which had a maximum of 667 virtual users. It had a ramping scale with the following values:
+- 4 minutes, targe 200 
+- 6 minutes, target 400 
+- 6 minutes, target 667 
+- 6 minutes, target 400
+- 4 minutes, target 200 
+- 2 minutes, target 50 
+
+#### Test Link
+- [Scalability Test](../tests/test_scalability.js)
+
+#### Test Results
+For the first scenario of 2500 VUs max:<br>
+<img src="./images/test_scalability_2.png" width="600" alt="Scenario 1 of scalability tests"><br>
+
+For the second scenario:<br>
+<img src="./images/test_scalability.png" width="600" alt="Scenario 2 of scalability tests"><br>
+At the max VUs the performance and instances of the services are shown here.<br>
+<img src="./images/user_service.png" width="600" alt="Scenario 2 user service "><br>
+<img src="./images/word_service.png" width="600" alt="Scenario 2 of word service"><br>
 
 ## Reflections
 
