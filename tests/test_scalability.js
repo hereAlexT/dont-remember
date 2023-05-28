@@ -24,7 +24,7 @@ export function studier() {
     check(signupRes, {
         "Signup successful": (res) => res.status === 200,
     });
-
+    sleep(20);
     // Step 4: login
     const loginUrl = `${user_url}/login`;
     const loginRes = http.post(loginUrl, account, params);
@@ -40,6 +40,7 @@ export function studier() {
         },
     };
     
+    sleep(20);
     // Step 5: Program adds words for user to study 
     const dictionaryWord = "horse"; 
     const addWordPayload = JSON.stringify({ "word": dictionaryWord });
@@ -51,6 +52,7 @@ export function studier() {
     });
 
 
+    sleep(20);
     // Step 7: Get word to study
     const nextWordUrl = `${word_url}/next_word`;
     const nextWordRes = http.get(nextWordUrl, authHeader)
@@ -76,7 +78,7 @@ export function studier() {
         "Next word retrieved successfully": (res) => res.status === 200,
     });
 
-    sleep(120); // User takes a break
+    sleep(20); // User takes a break
 }
 
 export const options = { 
@@ -85,9 +87,12 @@ export const options = {
          exec: 'studier', 
          executor: "ramping-vus", 
          stages: [ 
-            { duration: "4m", target: 1000 }, 
-            { duration: "4m", target: 2500 }, 
-            { duration: "4m", target: 0 }, 
+            { duration: "4m", target: 200 }, 
+            { duration: "6m", target: 400 }, 
+            { duration: "6m", target: 667 }, 
+            { duration: "6m", target: 400 },
+            { duration: "4m", target: 200 },
+            { duration: "2m", target: 50 }
          ], 
       }, 
    } 
