@@ -431,8 +431,8 @@ then they are tested after being deployed on AWS.
 
 #### Test Link
 
-- [Users Test](../tests/users_test.py)
-- [Words Test](../tests/words_test.py)
+- [Users Test](../tests/test_func_user.py)
+- [Words Test](../tests/test_func_word.py)
 
 #### How to Run the Code
 
