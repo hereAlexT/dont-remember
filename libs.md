@@ -1,0 +1,9 @@
+flask
+flask=sqlalchemy
+gunicorn
+sqlalchemy
+psycopg2
+flask-jwt-extended
+pytest
+k6s
+unittest
