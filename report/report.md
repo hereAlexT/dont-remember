@@ -68,7 +68,7 @@ streamlined interaction is established, further facilitating user engagement.
 
 ### Don't Remember Software System
 
-<img src="../model/dont-remember-software-system-architecture.png" width="400" alt="Software System Architecture">
+<img src="../model/dont-remember-software-system-architecture.png" width="400" alt="Software System Architecture"><br>
 Our software system provides a CLI tool for demonstration purposes. User requests can originate from this CLI tool or
 other tools. Initially, these requests reach the Amazon Elastic Load Balancers. Subsequently, these requests are
 redirected to the auto-scaling group that hosts two microservices: the Users Microservice and the Words Microservice.
@@ -232,9 +232,11 @@ user, but also protect them if their account is comprimised.
 Well designed and comprehensive unit tests are passed as well as manual tests by CLI tool which shows that the app is
 running as expected.
 
-### Scalability
+### Scalability and Availability
 
-todo
+Our architecture can scale up well with ECS and load balancing. The conclusion of tests show that our we can handle high loads as long as there is enough time to warm up and and we are able to spawn enough instances. At max loads, the user API has to spawn mutliple instances, and our tests were limited by the number of instances we could spawn. However, the word API did not need as many resources. So, as long as users are able to login and signup, they are able to study their words without issues. The only times our product would suffer outages or slow speeds, is if there is a sharp spike in users signing up, and after few it would normal as more instances are spawned, and we can go past the 22 maximum limit. Due to this, it would be abnormal for our product to be down, and our architecure can scale up well.  
+
+For the availability, our scalability tests prove that it can handle a steady ammount of users at once. And as further evidence we show that our availability test is able to run uninterupted for a whole day. This test was done while testing was still happening, so it was able to do it with some activity. The only thing we are not sure of is how a steady number of concurrent users over a much longer period of time effects our services.
 
 ### Extensibility
 
@@ -244,6 +246,10 @@ the
 workflow. Besides, an endpoint `/word_history` endpoint, provide detailed records of the learning, the clients could
 utilize
 it to do stuff such as draw a user's forget curve.
+
+### Maintainability
+
+
 
 ## Evaluation
 
@@ -352,6 +358,9 @@ application can run for a full day, checking if the health endpoints of each API
 #### Test Link
 
 - [Availability Test](../tests/test_availability.py)
+#### Test Result
+Our services were able to run uninterupted for a full 24 hours, with some testing activity occuring during that time.<br>
+<img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
 
 ### Maintainability Tests
 
@@ -403,4 +412,8 @@ At the max VUs the performance and instances of the services are shown here.<br>
 
 ## Reflections
 
-During the process of designing and implementing the project proposal for the "Don't Remember" application, We have learned several valuable lessons that would influence our approach in future projects. The biggest learning experience was the process of designing the architecture and how to test it. When given the project proposal, the presense of quality attributes greatly helped delever a quality product. Without it, we would have struggled to find the best solution to deliver the functionality. We were able to make important changes to the implementation and architecture by considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future. Additionally, designing an architecture first proved to make development substancially easier and also made it easier to split tasks between team members. For future project, we will be using quality attriutes and designing architecures to achieve the best implementation, as this project proves how beneficial it can be. Considering what we would do differently, we would change and add the quality attributes to more suitibly fit the project. At the start of the projet, the quality attributes were just a way to achieve marks. However, once it started to influence and design and helped us design for the future, it was evident that it was an important tool that should be used for design. So, if we could do it again, we would consider changing the quality attributes to better suit the project. 
+During the process of designing and implementing the project proposal for the "Don't Remember" application, We have learned several valuable lessons that would influence our approach in future projects. The biggest learning experience was the process of designing the architecture and how to test it. When given the project proposal, the presense of quality attributes greatly helped deliver a quality product. Without it, we would have struggled to find the best solution to deliver the functionality. We were able to make important changes to the implementation and architecture by considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future. Additionally, designing an architecture first proved to make development substancially easier and also made it easier to split tasks between team members. For future projects, we will be using quality attributes and designing architecures to achieve the best implementation, as this project proves how beneficial it can be. 
+
+Another important learning experience was setting up test suites. At the start we only implemented these as a requirment to demonstrate our evaluations. It was assumed that it was going to be another functionality we had to deliver. However, once we implemented this, we noticed how much time it saved us in the long run. By writing the tests, we were able to debug early. And by ensuring the functionality worked after every change, it freed other developers working on different aspects of the project from having to debug their own code and code of others. This was apparent during the development of the CLI tool, where we had already created the API functionality and its test suites. We only had to debug the CLI tool, as we knew that the functionality can already deliver everything in the tests.  
+
+For what we could do differently, we would start testing much earlier. Preferably during the development of the functionality. As when we wrote the tests after finishing writing the functionality, there were alot of errors. And some developers were writing other pieces of the functionality, that depended on other functionality, became stuck. Another way to improve in the future is to use GitHub actions to automate tests on the repository. Running the tests was expected of the developers, but not enforced. And to ensure that nothing slipped through the cracks, automated tests on our repository after every push could help as catch errors early.
