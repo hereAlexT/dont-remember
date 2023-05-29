@@ -7,3 +7,4 @@ flask-jwt-extended
 pytest
 k6s
 unittest
+pipenv
