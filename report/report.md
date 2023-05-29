@@ -249,6 +249,7 @@ it to do stuff such as draw a user's forget curve.
 
 ### Maintainability
 
+While microservices architecture offers advantages such as modularity, independent deployment, and technology diversity, it also introduces complexities of distributed systems, increased communication overhead, distributed transaction management, and operational challenges. These factors should be carefully considered and evaluated based on specific needs and team capabilities when adopting microservices. Furthermore, our current system lacks the capability to perform database schema updates, which may potentially affect maintainability. 
 
 
 ## Evaluation
