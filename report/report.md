@@ -447,11 +447,11 @@ was the process of designing the architecture and how to test it. When given the
 quality attributes greatly helped deliver a quality product. Without it, we would have struggled to find the best
 solution to deliver the functionality. We were able to make important changes to the implementation and architecture by
 considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future.
-Additionally, designing an architecture first proved to make development substancially easier and also made it easier to
-split tasks between team members. For future projects, we will be using quality attributes and designing architecures to
+Additionally, designing an architecture first proved to make development substantially easier and also made it easier to
+split tasks between team members. For future projects, we will be using quality attributes and designing architecture to
 achieve the best implementation, as this project proves how beneficial it can be.
 
-In architecture design aspect, previously we only studied others' mature architectures from a case-study perspective.
+In the architecture design aspect, previously we only studied others' mature architectures from a case-study perspective.
 Through this project, we found that we would encounter many problems in the software architecture design and development
 process. For example, when implementing the functions, we found that many details were not considered in the
 architecture design. In addition to the software architecture design, we also revised the product architecture during
@@ -467,11 +467,11 @@ regarding tokens led to frequent changes in our strategy, resulting in a signifi
 of a test-driven approach throughout the entire project meant that we discovered numerous issues during testing,
 necessitating revisiting the codebase for modifications. This led to an escalation in development costs.
 
-Another important learning experience was setting up test suites. At the start we only implemented these as a requirment
+Another important learning experience was setting up test suites. At the start, we only implemented these as a requirement
 to demonstrate our evaluations. It was assumed that it was going to be another functionality we had to deliver. However,
 once we implemented this, we noticed how much time it saved us in the long run. By writing the tests, we were able to
 debug early. And by ensuring the functionality worked after every change, it freed other developers working on different
-aspects of the project from having to debug their own code and code of others. This was apparent during the development
+aspects of the project from having to debug their code and the code of others. This was apparent during the development
 of the CLI tool, where we had already created the API functionality and its test suites. We only had to debug the CLI
 tool, as we knew that the functionality can already deliver everything in the tests.
 
@@ -479,13 +479,13 @@ For what we could do differently, first, we should have focused more on the over
 which would have made development and testing more efficient later on. Secondly, I think there is one thing we could
 have done better. It is that we didn't estimate the user volume at the beginning. Although we passed the load test
 perfectly in the end, it was probably just luck. Next time, we should consider the user volume in advance and use it as
-an assumption in designing the architecture to avoid wasting development and deployment costs. Apart from that,we would
+an assumption in designing the architecture to avoid wasting development and deployment costs. Apart from that, we would
 start testing much earlier. Preferably during the development of the functionality. As when we wrote the tests after
-finishing writing the functionality, there were alot of errors. And some developers were writing other pieces of the
-functionality, that depended on other functionality, became stuck. Another way to improve in the future is to use GitHub
+finishing writing the functionality, there were a lot of errors. And some developers were writing other pieces of the
+functionality, that depended on other functionality, and became stuck. Another way to improve in the future is to use GitHub
 actions to automate tests on the repository. Running the tests was expected of the developers, but not enforced. And to
-ensure that nothing slipped through the cracks, automated tests on our repository after every push could help as catch
+ensure that nothing slipped through the cracks, automated tests on our repository after every push could help us catch
 errors early.
 
-Finally,thank you to the professor and tutors for guiding this project, and thank you to the team members for their
+Finally, thank you to the professor and tutors for guiding this project, and thank you to the team members for their
 contributions.
