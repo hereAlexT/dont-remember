@@ -234,9 +234,18 @@ running as expected.
 
 ### Scalability and Availability
 
-Our architecture can scale up well with ECS and load balancing. The conclusion of tests show that our we can handle high loads as long as there is enough time to warm up and and we are able to spawn enough instances. At max loads, the user API has to spawn mutliple instances, and our tests were limited by the number of instances we could spawn. However, the word API did not need as many resources. So, as long as users are able to login and signup, they are able to study their words without issues. The only times our product would suffer outages or slow speeds, is if there is a sharp spike in users signing up, and after few it would normal as more instances are spawned, and we can go past the 22 maximum limit. Due to this, it would be abnormal for our product to be down, and our architecure can scale up well.  
+Our architecture can scale up well with ECS and load balancing. The conclusion of tests show that our we can handle high
+loads as long as there is enough time to warm up and and we are able to spawn enough instances. At max loads, the user
+API has to spawn mutliple instances, and our tests were limited by the number of instances we could spawn. However, the
+word API did not need as many resources. So, as long as users are able to login and signup, they are able to study their
+words without issues. The only times our product would suffer outages or slow speeds, is if there is a sharp spike in
+users signing up, and after few it would normal as more instances are spawned, and we can go past the 22 maximum limit.
+Due to this, it would be abnormal for our product to be down, and our architecure can scale up well.
 
-For the availability, our scalability tests prove that it can handle a steady ammount of users at once. And as further evidence we show that our availability test is able to run uninterupted for a whole day. This test was done while testing was still happening, so it was able to do it with some activity. The only thing we are not sure of is how a steady number of concurrent users over a much longer period of time effects our services.
+For the availability, our scalability tests prove that it can handle a steady ammount of users at once. And as further
+evidence we show that our availability test is able to run uninterupted for a whole day. This test was done while
+testing was still happening, so it was able to do it with some activity. The only thing we are not sure of is how a
+steady number of concurrent users over a much longer period of time effects our services.
 
 ### Extensibility
 
@@ -249,8 +258,13 @@ it to do stuff such as draw a user's forget curve.
 
 ### Maintainability
 
-While microservices architecture offers advantages such as modularity, independent deployment, and technology diversity, it also introduces complexities of distributed systems, increased communication overhead, distributed transaction management, and operational challenges. These factors should be carefully considered and evaluated based on specific needs and team capabilities when adopting microservices. In our deployment structure, we have utilized AWS combined with Terraform, which provides ease of maintenance. Additionally, the user and word services are decoupled, ensuring that maintenance activities do not impact each other. Furthermore, our current system lacks the capability to perform database schema updates workflow, which may potentially affect maintainability. 
-
+While microservices architecture offers advantages such as modularity, independent deployment, and technology diversity,
+it also introduces complexities of distributed systems, increased communication overhead, distributed transaction
+management, and operational challenges. These factors should be carefully considered and evaluated based on specific
+needs and team capabilities when adopting microservices. In our deployment structure, we have utilized AWS combined with
+Terraform, which provides ease of maintenance. Additionally, the user and word services are decoupled, ensuring that
+maintenance activities do not impact each other. Furthermore, our current system lacks the capability to perform
+database schema updates workflow, which may potentially affect maintainability.
 
 ## Evaluation
 
@@ -258,7 +272,9 @@ While microservices architecture offers advantages such as modularity, independe
 
 #### Test Plan
 
-The purpose of this test is to recreate user scenarios. This test includes all functions of Don’t Remember, simulations have been conducted for every possible usage scenario of the user, and every step of the user's operation has been simulated in the results.
+The purpose of this test is to recreate user scenarios. This test includes all functions of Don’t Remember, simulations
+have been conducted for every possible usage scenario of the user, and every step of the user's operation has been
+simulated in the results.
 
 #### Test Link
 
@@ -266,7 +282,8 @@ The purpose of this test is to recreate user scenarios. This test includes all f
 
 #### Results
 
-All commands return normal results. Functions in the demonstration are all runned normally. The actual test results match the expected results. 
+All commands return normal results. Functions in the demonstration are all runned normally. The actual test results
+match the expected results.
 
 ### Security Tests
 
@@ -309,45 +326,26 @@ then they are tested after being deployed on AWS.
 1. Change the URl of endpoints in base.py
 2. Use command `pytest`
 
-#### Tested APIs
-User management
-  - [signup]:
-    - input: username, password; output: 3 senarios(200,400,409)
-    - result: all pass
-  - [login]:
-    - input: username, password; output: 4 senarios(200,400,401,404)
-    - result: all pass
-  - [logout]:
-    - result: all pass
-  - [token_verify]:
-    - result: all pass
-
-Team management
-  - [new_team]:
-    - result: all pass
-  - [add_me_to_team]:
-    - result: all pass
-  - [leave_team]:
-    - result: all pass
-  - [update_team]:
-    - result: all pass
-  - [team_info]:
-    - result: all pass
-
-Words management
-  - [add_new_word]:
-    - result: all pass
-  - [word_history]:
-    - result: all pass
-  - [update_word]:
-    - result: all pass
-  - [next_word]:
-    - result: all pass
-
 #### Test Results
 
 <img src="./images/test_func_user.png" width="400" alt="Test Result of test_func_user">
 <img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
+
+### CLI Tool Evaluation
+
+### Test Plan
+
+We tested the CLI tool manually, as it we want to test the user experience and
+the functionality of the CLI tool. We designed 15 usage cases, and test them one by one. The detailed test
+cases are in [Test Cases](./cli_tool_test_logs.md).
+
+### Test Record
+
+- [Test Record](./cli_tool_test_logs.md)
+
+#### Test Results
+
+All cases passed.
 
 ### Availability Tests
 
@@ -359,8 +357,11 @@ application can run for a full day, checking if the health endpoints of each API
 #### Test Link
 
 - [Availability Test](../tests/test_availability.py)
+
 #### Test Result
-Our services were able to run uninterupted for a full 24 hours, with some testing activity occuring during that time.<br>
+
+Our services were able to run uninterupted for a full 24 hours, with some testing activity occuring during that
+time.<br>
 <img src="./images/test_func_word.png" width="400" alt="Test Result of test_fuc_word"> <br>
 
 ### Maintainability Tests
@@ -371,6 +372,7 @@ We make some changed in both users and words services and update the container v
 deploy latest update.
 
 #### Test Workflow & Result
+
 Before maintenance, we record the current revision, in this case, revision = 3.<br>
 <img src="./images/maintain_1.png" width="600" alt="Before Maintenance"><br>
 Then, we update codes and use Terraform to update.<br>
@@ -385,23 +387,32 @@ As shown above, tests passed.
 ### Scalability Tests
 
 #### Test Plan
-We test how our architecture handles high loads. Using K6, we created one virtual user (VU) who signs in, logins, adds a new word, gets the word and studies it. At first, we tried to push the APIs to the limit, we ran the test for a total of 12 minutes with a ramping scale up with the follow values:
+
+We test how our architecture handles high loads. Using K6, we created one virtual user (VU) who signs in, logins, adds a
+new word, gets the word and studies it. At first, we tried to push the APIs to the limit, we ran the test for a total of
+12 minutes with a ramping scale up with the follow values:
+
 - 4 minutes, target 1000
 - 4 minutes, target 2500
 - 4 minutes, target 0
 
-This test was able to manage very high loads, but we hit maximum instances of 22 total. After this we created a more suitable test which ran for a total of 28 minutes which had a maximum of 667 virtual users. It had a ramping scale with the following values:
-- 4 minutes, targe 200 
-- 6 minutes, target 400 
-- 6 minutes, target 667 
+This test was able to manage very high loads, but we hit maximum instances of 22 total. After this we created a more
+suitable test which ran for a total of 28 minutes which had a maximum of 667 virtual users. It had a ramping scale with
+the following values:
+
+- 4 minutes, targe 200
 - 6 minutes, target 400
-- 4 minutes, target 200 
-- 2 minutes, target 50 
+- 6 minutes, target 667
+- 6 minutes, target 400
+- 4 minutes, target 200
+- 2 minutes, target 50
 
 #### Test Link
+
 - [Scalability Test](../tests/test_scalability.js)
 
 #### Test Results
+
 For the first scenario of 2500 VUs max:<br>
 <img src="./images/test_scalability_2.png" width="600" alt="Scenario 1 of scalability tests"><br>
 
@@ -413,14 +424,51 @@ At the max VUs the performance and instances of the services are shown here.<br>
 
 ## Reflections
 
-During the process of designing and implementing the project proposal for the "Don't Remember" application, We have learned several valuable lessons that would influence our approach in future projects. The biggest learning experience was the process of designing the architecture and how to test it. When given the project proposal, the presense of quality attributes greatly helped deliver a quality product. Without it, we would have struggled to find the best solution to deliver the functionality. We were able to make important changes to the implementation and architecture by considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future. Additionally, designing an architecture first proved to make development substancially easier and also made it easier to split tasks between team members. For future projects, we will be using quality attributes and designing architecures to achieve the best implementation, as this project proves how beneficial it can be. 
+During the process of designing and implementing the project proposal for the "Don't Remember" application, We have
+learned several valuable lessons that would influence our approach in future projects. The biggest learning experience
+was the process of designing the architecture and how to test it. When given the project proposal, the presense of
+quality attributes greatly helped deliver a quality product. Without it, we would have struggled to find the best
+solution to deliver the functionality. We were able to make important changes to the implementation and architecture by
+considering how we would be able to deliver and test the quality attributes. This allowed us to design for the future.
+Additionally, designing an architecture first proved to make development substancially easier and also made it easier to
+split tasks between team members. For future projects, we will be using quality attributes and designing architecures to
+achieve the best implementation, as this project proves how beneficial it can be.
 
-In architecture design aspect, previously we only studied others' mature architectures from a case-study perspective. Through this project, we found that we would encounter many problems in the software architecture design and development process. For example, when implementing the functions, we found that many details were not considered in the architecture design. In addition to the software architecture design, we also revised the product architecture during the implementation process. Because software implementation is not only based on the software architecture but also on real user scenarios, the design of the whole product is also very important. In the product architecture design, we sorted out our main functions, user scenarios, user processes, and the feedback corresponding to each user action when interacting with the software. These designs were very useful in the software implementation and the subsequent testing sessions. If we have the opportunity to do a similar project next time, we believe we will do a good job of product design at the beginning, which will make the subsequent development and testing more efficient.
+In architecture design aspect, previously we only studied others' mature architectures from a case-study perspective.
+Through this project, we found that we would encounter many problems in the software architecture design and development
+process. For example, when implementing the functions, we found that many details were not considered in the
+architecture design. In addition to the software architecture design, we also revised the product architecture during
+the implementation process. Because software implementation is not only based on the software architecture but also on
+real user scenarios, the design of the whole product is also very important. In the product architecture design, we
+sorted out our main functions, user scenarios, user processes, and the feedback corresponding to each user action when
+interacting with the software. These designs were very useful in the software implementation and the subsequent testing
+sessions. If we have the opportunity to do a similar project next time, we believe we will do a good job of product
+design at the beginning, which will make the subsequent development and testing more efficient.
 
-In our API design, although we initially decided to introduce tokens to ensure security, our lack of understanding regarding tokens led to frequent changes in our strategy, resulting in a significant waste of time. Moreover, the lack of a test-driven approach throughout the entire project meant that we discovered numerous issues during testing, necessitating revisiting the codebase for modifications. This led to an escalation in development costs. 
+In our API design, although we initially decided to introduce tokens to ensure security, our lack of understanding
+regarding tokens led to frequent changes in our strategy, resulting in a significant waste of time. Moreover, the lack
+of a test-driven approach throughout the entire project meant that we discovered numerous issues during testing,
+necessitating revisiting the codebase for modifications. This led to an escalation in development costs.
 
-Another important learning experience was setting up test suites. At the start we only implemented these as a requirment to demonstrate our evaluations. It was assumed that it was going to be another functionality we had to deliver. However, once we implemented this, we noticed how much time it saved us in the long run. By writing the tests, we were able to debug early. And by ensuring the functionality worked after every change, it freed other developers working on different aspects of the project from having to debug their own code and code of others. This was apparent during the development of the CLI tool, where we had already created the API functionality and its test suites. We only had to debug the CLI tool, as we knew that the functionality can already deliver everything in the tests.  
+Another important learning experience was setting up test suites. At the start we only implemented these as a requirment
+to demonstrate our evaluations. It was assumed that it was going to be another functionality we had to deliver. However,
+once we implemented this, we noticed how much time it saved us in the long run. By writing the tests, we were able to
+debug early. And by ensuring the functionality worked after every change, it freed other developers working on different
+aspects of the project from having to debug their own code and code of others. This was apparent during the development
+of the CLI tool, where we had already created the API functionality and its test suites. We only had to debug the CLI
+tool, as we knew that the functionality can already deliver everything in the tests.
 
-For what we could do differently, first, we should have focused more on the overall product design at the beginning, which would have made development and testing more efficient later on. Secondly, I think there is one thing we could have done better. It is that we didn't estimate the user volume at the beginning. Although we passed the load test perfectly in the end, it was probably just luck. Next time, we should consider the user volume in advance and use it as an assumption in designing the architecture to avoid wasting development and deployment costs. Apart from that,we would start testing much earlier. Preferably during the development of the functionality. As when we wrote the tests after finishing writing the functionality, there were alot of errors. And some developers were writing other pieces of the functionality, that depended on other functionality, became stuck. Another way to improve in the future is to use GitHub actions to automate tests on the repository. Running the tests was expected of the developers, but not enforced. And to ensure that nothing slipped through the cracks, automated tests on our repository after every push could help as catch errors early.
+For what we could do differently, first, we should have focused more on the overall product design at the beginning,
+which would have made development and testing more efficient later on. Secondly, I think there is one thing we could
+have done better. It is that we didn't estimate the user volume at the beginning. Although we passed the load test
+perfectly in the end, it was probably just luck. Next time, we should consider the user volume in advance and use it as
+an assumption in designing the architecture to avoid wasting development and deployment costs. Apart from that,we would
+start testing much earlier. Preferably during the development of the functionality. As when we wrote the tests after
+finishing writing the functionality, there were alot of errors. And some developers were writing other pieces of the
+functionality, that depended on other functionality, became stuck. Another way to improve in the future is to use GitHub
+actions to automate tests on the repository. Running the tests was expected of the developers, but not enforced. And to
+ensure that nothing slipped through the cracks, automated tests on our repository after every push could help as catch
+errors early.
 
-Finally,thank you to the professor and tutors for guiding this project, and thank you to the team members for their contributions.
+Finally,thank you to the professor and tutors for guiding this project, and thank you to the team members for their
+contributions.
