@@ -4,6 +4,23 @@
 
 ## Abstract
 
+This document presents the design, implementation, and evaluation of "Don't Remember," an English vocabulary learning
+application. The project aims to provide users with a personalized and efficient learning experience, allowing them to
+track their progress, set personal goals, and collaborate with teams. To achieve this, we have employed a microservices
+architecture, utilizing AWS ECS, Amazon Elastic Load Balancers, and a PostgreSQL database. The system landscape includes
+users, other tools, and the Don't Remember software system, which interact through dedicated APIs.
+
+Throughout the development process, we have focused on ensuring security, reliability, availability, maintainability,
+scalability, and extensibility. We have adopted JSON Web Tokens (JWT) for secure token generation and verification, and
+implemented auto-scaling policies to maintain system availability and scalability. The use of Terraform for
+infrastructure management has improved maintainability, while the microservices architecture has enhanced extensibility.
+
+The document also discusses trade-offs, critiques, and reflections on the project, highlighting the lessons learned and
+potential improvements for future projects. The evaluation section covers various tests conducted to assess the system's
+functionality, security, availability, maintainability, and scalability. Overall, the "Don't Remember" application
+demonstrates the effectiveness of a well-designed architecture and the importance of considering quality attributes in
+software development.
+
 ## Proposal Clarification
 
 - This section is used to explain some of the unclear content described in the proposal.
