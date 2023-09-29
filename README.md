@@ -1,4 +1,4 @@
-# A Scalable Spaced Repetition Vocabulary Learning App
+# A Scalable Spaced Repetition Vocabulary Learning App - Don't Remember
 This is a spaced repetitive English vocabulary learning app coded by Flask and Postgres with a microservice architecture. The application is designed to provide users with a personalized and efficient learning experience, allowing them to track their progress, set personal goals, and collaborate with teams.
 
 
