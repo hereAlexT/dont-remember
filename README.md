@@ -33,3 +33,4 @@ terraform apply -var-file="secret.tfvars" -auto-approve -parallelism=20
 ```
 ## Documentation
 For detailed technical information, please refer to the report.
+
